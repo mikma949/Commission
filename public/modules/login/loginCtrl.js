@@ -62,7 +62,7 @@ app.controller("loginCtrl", function($scope, $http, $location)
 	*/
 	$scope.redirect=function()
 	{
-		$location.url('/order');	
+		$location.url('/sales');	
 	}
 
 	/*

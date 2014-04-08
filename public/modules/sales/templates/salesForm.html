@@ -1,0 +1,18 @@
+<input type="text" 
+				ng-model="salesForm.salesPersonId"
+				name="loginUserForm.user" 
+				placeholder="User Name"
+				required/>
+<!-- SALES City -->
+		<div class="form-group">
+			<label>City</label><br>
+			<select name="city" 
+			ng-model="salesForm.cityId"
+		ng-init="salesForm.city='1'"
+			ng-options="item.id as item.name for item in sales.cities"
+			required>
+			<option value="">Select City</option>
+			</select>
+		</div>
+
+<button ng-click="place(salesForm)" class="btn btn-primary">Submit</button>

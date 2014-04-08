@@ -5,7 +5,7 @@ require_once("RestRoute-class.inc");
 /**
 * RestRouteEndMonth:
 */
-class RestRouteLogin extends RestRoute
+class RestRouteAdmin extends RestRoute
 {
 
 	function put($p, $data)

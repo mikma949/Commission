@@ -5,7 +5,7 @@ require_once("RestRoute-class.inc");
 /**
 * RestRouteEndMonth:
 */
-class RestRouteBid extends RestRoute
+class RestRouteSales extends RestRoute
 {
 
 	function put($p, $data)
@@ -14,105 +14,112 @@ class RestRouteBid extends RestRoute
 		{
 			return $this->place($data);
 		}
-		elseif ($p[0] == "reserve")
+		elseif ($p[0] == "checkIfReported")
 		{
-			return $this->reserve($data);
+			return $this->checkIfReported($data);
 		}
-		elseif ($p[0] == "finalizeDeal")
+	/*	elseif ($p[0] == "finalizeDeal")
 		{
 			return $this->finalizeDeal($data);
 		}
 		elseif ($p[0] == "getLowest")
 		{
 			return $this->getLowest($data);
-		}
+		}*/
 		return false;
 	}
+	function get($p)
+		{
+			if ($p[0] == "getCities")
+			{
+				return $this->getCities();
+			}/*
+			elseif ($p[0] == "getUser")
+			{
+				return $this->getUser($data);
+			}*/
+			return false;
+	}
 
+
+/*
+======= POST =======
+*/
+
+	// Adds a sale to the database
 	private function place($data)
 	{
 		global $db;
 
 		$result = $db->prepare("
 			INSERT INTO 
-				bid (orderId,sellerId,amount)
+				sales (saleDate ,salesPersonId, productId, quantity)
 			VALUES
-				(:orderId,:sellerId,:bid)
+				(:saleDate,:salesPersonId,:lock,:locksSold),
+				(:saleDate,:salesPersonId,:stock,:stocksSold),
+				(:saleDate,:salesPersonId,:barrel,:barrelsSold)
 			");
 
-		$result->bindParam(':bid', $data->bid, PDO::PARAM_STR);
-		$result->bindParam(':orderId', $data->orderId, PDO::PARAM_STR);
-		$result->bindParam(':sellerId', $data->sellerId, PDO::PARAM_STR);
+		$result->bindParam(':saleDate', $data->saleDate, PDO::PARAM_STR);
+		$result->bindParam(':salesPersonId', $data->salesPersonId, PDO::PARAM_STR);
+		$result->bindParam(':lock', $data->lock, PDO::PARAM_INT);
+		$result->bindParam(':stock', $data->stock, PDO::PARAM_INT);
+		$result->bindParam(':barrel', $data->barrel, PDO::PARAM_INT);
+		$result->bindParam(':locksSold', $data->locksSold, PDO::PARAM_INT);
+		$result->bindParam(':stocksSold', $data->stocksSold, PDO::PARAM_INT);
+		$result->bindParam(':barrelsSold', $data->barrelsSold, PDO::PARAM_INT);
 		$result->execute();
-		return $result;
+		return $result->fetchAll(PDO::FETCH_ASSOC);	
 	}
 
-	private function reserve($data)
-	{
-		global $db;
 
-		$result = $db->prepare("
-			UPDATE 
-				bid 
-			SET
-				isReserved='1'
-			WHERE
-				id=:bidId
-			");
-
-		$result->bindParam(':bidId', $data->bidId, PDO::PARAM_INT);
-		$result->execute();
-		return $result;
-	}
-
-	private function finalizeDeal($data)
-	{
-		global $db;
-
-		$result = $db->prepare("
-			UPDATE 
-				bid 
-			SET
-				isReserved='1',hasFinalized='1'
-			WHERE
-				id=:bidId
-			");
-
-		$result->bindParam(':bidId', $data->bidId, PDO::PARAM_STR);
-		$result->execute();
-
-		//Deleting all other bids for the specific order
-		$result = $db->prepare("
-			DELETE FROM
-				bid
-			WHERE 
-				orderId=:orderId
-			AND
-				NOT id=:bidId
-			");
-
-		$result->bindParam(':bidId', $data->bidId, PDO::PARAM_STR);
-		$result->bindParam(':orderId', $data->orderId, PDO::PARAM_STR);
-		$result->execute();
-
-		return $result;
-	}
-
-	private function getLowest($data)
+	private function checkIfReported($data)
 	{
 		global $db;
 
 		$result = $db->prepare("
 			SELECT 
-				min(amount) AS bid 
+				reported
 			FROM 
-				bid
+				report
 			WHERE 
-				orderId=:orderId
+				year=YEAR(:saleDate)
+				AND 
+				month=MONTH(:saleDate);
 			");
-		$result->bindParam(':orderId', $data->orderId, PDO::PARAM_INT);
+
+		$result->bindParam(':saleDate', $data->saleDate, PDO::PARAM_STR);
+		
 		$result->execute();
-		return $result->fetchAll(PDO::FETCH_ASSOC);
+		return $result->fetchAll(PDO::FETCH_ASSOC);	
 	}
+
+
+/*
+======= GET =======
+*/
+	private function getCities()
+	{
+		global $db;
+
+		$result = $db->prepare("
+			SELECT
+				*
+			FROM
+				city
+			");
+
+		$result->execute();
+		return $result->fetchAll(PDO::FETCH_ASSOC);		
+	}
+
+
+
+
+
+
+
+
+	
 }
 ?>
