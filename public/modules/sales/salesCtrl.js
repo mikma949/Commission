@@ -5,13 +5,15 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	// Loads templates into id to be called on in the view 
 	$scope.templates=
 	{
-		createOrderForm:'./modules/order/templates/orderForm1.html',
+		salesForm:'./modules/sales/templates/salesForm.html',
 		buyerOrders:'./modules/order/templates/buyerOrders.html',
 		sellerOrders:'./modules/order/templates/sellerOrders.html'
 	};
 
 	
-	
+	$scope.hej=function(){
+		alert("hej");
+	}
 
 	/*
 	This method will retrieve cookies stored by the application 

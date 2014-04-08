@@ -3,39 +3,38 @@
 require_once("RestRoute-class.inc");
 
 /**
-* RestRouteEndMonth:
+* RestRouteAdmin:
 */
-class RestRouteLogin extends RestRoute
+class RestRouteAdmin extends RestRoute
 {
 
 	function put($p, $data)
 	{
-		if ($p[0] == "checkUser")
+		if ($p[0] == "updateUser")
 		{
-			return $this->checkUser($data);
+			return $this->updateUser($data);
 		}
 		return false;
 	}
 
-	private function checkUser($data)
+	private function updateUser($data)
 	{
 		global $db;
 
 		$result = $db->prepare("
-			SELECT
-				name
-			FROM
-				user
-			WHERE
+			UPDATE 
+				user 
+			SET 
+				role=:role 
+			WHERE 
 				name=:user
-				AND
-				password=:password
 			");
 
 		$result->bindParam(':user', $data->user, PDO::PARAM_STR);
-		$result->bindParam(':password', $data->password, PDO::PARAM_STR);
+		$result->bindParam(':role', $data->role, PDO::PARAM_STR);
 		$result->execute();
-		return $result->fetchAll(PDO::FETCH_ASSOC);
+		return $result;
+		
 	}
 }
 ?>

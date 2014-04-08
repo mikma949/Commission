@@ -5,7 +5,7 @@ require_once("RestRoute-class.inc");
 /**
 * RestRouteEndMonth:
 */
-class RestRouteBid extends RestRoute
+class RestRouteSales extends RestRoute
 {
 
 	function put($p, $data)

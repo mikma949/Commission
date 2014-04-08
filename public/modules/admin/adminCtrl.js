@@ -10,8 +10,58 @@ app.controller("adminCtrl", function($scope, $http, $location)
 		sellerOrders:'./modules/order/templates/sellerOrders.html'
 	};
 
+	$scope.retrieveUserNames = function () {
+		
+		$http({method: 'GET', url: 'json/user/getAllUsers', data: ""}).
+		success(function (data, status, headers, config) {
+			$scope.usersInDB=data;
+		}).
+		error(function (data, status, headers, config) {
+		    alert("Failed to retrieve users from the db");
+		});
+	};
+
+	/*
+	This method will check if the userName exists in the 
+	server detabase
+	*/
+	$scope.checkUsernameValidity=function(userForm)
+	{	
+		var validNewUserName=false;
+		
+		angular.forEach($scope.usersInDB,function(value){
+			if(userForm.user==value.name){
+				validNewUserName=true;
+			}
+		});
+		return validNewUserName;
+	}
+
+	/*
+	Checks that the users role is vaild
+	*/
+	$scope.validRole=function(userForm)
+	{
+		var isValid = false;
+
+		if (userForm.role >= 0 && userForm.role <= 3) {
+			isValid = true;
+		};
+		return isValid;
+	}
 	
-	
+	$scope.updateUserRole=function(userForm)
+	{
+		$http({method: 'POST', url: 'json/admin/updateUser', data: userForm}).
+		success(function (data, status, headers, config) {
+
+			alert("Update success");
+		}).
+		error(function (data, status, headers, config) {
+
+		    alert("Failed to add to db");
+		});	
+	}
 
 	/*
 	This method will retrieve cookies stored by the application 

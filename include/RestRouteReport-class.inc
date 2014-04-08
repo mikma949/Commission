@@ -5,7 +5,7 @@ require_once("RestRoute-class.inc");
 /**
 * RestRouteOrder:
 */
-class RestRouteOrder extends RestRoute
+class RestRouteReport extends RestRoute
 {
 	function put($p, $data)
 	{

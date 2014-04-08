@@ -23,10 +23,13 @@ app.controller("createUserCtrl", function($scope, $http, $location)
 	detabase and redirec user to login on sucess.
 	*/
 	$scope.addUser=function(userForm)
-	{
+	{	
 		//hashing password
 		userForm.password=$scope.hashSting(userForm.password);
 		userForm.passwordConfirm=$scope.hashSting(userForm.passwordConfirm);
+
+		//Role assigned to user
+		userForm.role = 0;
 
 		$http({method: 'POST', url: 'json/user/addUser', data: userForm}).
 		success(function (data, status, headers, config) {
@@ -141,6 +144,6 @@ app.controller("createUserCtrl", function($scope, $http, $location)
 	*/
 	$scope.redirect=function()
 	{
-		$location.url('/login');
+		$location.url('/');
 	}
 });

@@ -23,7 +23,7 @@ class RestRouteLogin extends RestRoute
 
 		$result = $db->prepare("
 			SELECT
-				name
+				name, role
 			FROM
 				user
 			WHERE
@@ -36,6 +36,8 @@ class RestRouteLogin extends RestRoute
 		$result->bindParam(':password', $data->password, PDO::PARAM_STR);
 		$result->execute();
 		return $result->fetchAll(PDO::FETCH_ASSOC);
+		
 	}
 }
+
 ?>

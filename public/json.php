@@ -23,11 +23,11 @@ catch(PDOException $e)
 }
 
 $rest = new RestService();
-$rest->addRoute("admin", new RestRouteOrder());
+$rest->addRoute("admin", new RestRouteAdmin());
 $rest->addRoute("user", new RestRouteUser());
 $rest->addRoute("login", new RestRouteLogin());
-$rest->addRoute("sales", new RestRouteBid());
-$rest->addRoute("report", new RestRouteBid());
+$rest->addRoute("sales", new RestRouteSales());
+$rest->addRoute("report", new RestRouteReport());
 echo json_encode($rest->output());
 exit;
 ?>

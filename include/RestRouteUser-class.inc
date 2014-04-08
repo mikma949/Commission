@@ -69,11 +69,12 @@ class RestRouteUser extends RestRoute
 
 		$result = $db->prepare("
 			INSERT INTO 
-			user (name,password) 
-			values (:userName,:passwordHash);
+			user (name,password,role) 
+			values (:userName,:passwordHash,:role);
 			");
 		$result->bindParam(':userName', $data->user, PDO::PARAM_STR);
 		$result->bindParam(':passwordHash', $data->password, PDO::PARAM_STR);
+		$result->bindParam(':role', $data->role, PDO::PARAM_STR);
 		$result->execute();
 		return $result;
 	}

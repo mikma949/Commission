@@ -1,0 +1,43 @@
+<div ng-controller="adminCtrl"
+data-ng-init="retrieveUserNames()">
+	<div class="row">
+		<p>Admin</p>
+		<form name="promoteUserForm" 
+			novalidate 
+			ng-model="promoteUserForm"
+			ng-submit="updateUserRole(promoteUserForm)">
+
+			<div class"row">
+			<div class="small-4 columns">
+				
+				<input type="text" 
+				ng-model="promoteUserForm.user"
+				name="promoteUserForm.user"
+				placeholder="User Name" 
+				required/>
+					
+				<p class="errorMessage" 
+				ng-show="checkUsernameValidity(promoteUserForm) == false">
+				The username does not exist</p>
+				
+				<input type="text"
+				id="promoteUserForm.role"
+				ng-model="promoteUserForm.role"
+				name="promoteUserForm.role" 
+				placeholder="role" 
+				required />
+				
+				<p class="errorMessage" 
+				ng-show="validRole(promoteUserForm) == false">
+				Select a role between 0 and 3</p>
+				
+				<button id="promoteUserButton"
+				type="submit"
+				ng-disabled="!(checkUsernameValidity(promoteUserForm) &&
+				validRole(promoteUserForm))">
+				Update Role</button>
+			</div>
+			</div>		
+		</form>
+	</div>
+</div>

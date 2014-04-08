@@ -25,7 +25,8 @@ app.controller("loginCtrl", function($scope, $http, $location)
 		success(function (data, status, headers, config) {
 			if(data.length=1){
 				$scope.setCookie('user',data[0].name);
-				$scope.redirect();
+				$scope.setCookie('role',data[0].role);
+				$scope.redirect(data[0].role);
 			}
 			else{
 				alert("Invalid login information")
@@ -60,9 +61,13 @@ app.controller("loginCtrl", function($scope, $http, $location)
 	/*
 	This method will handle redirection to a given module
 	*/
-	$scope.redirect=function()
+	$scope.redirect=function(role)
 	{
-		$location.url('/order');	
+		if (role == 1) {$location.url('/sales')};
+
+		if (role == 2) {$location.url('/report')};
+
+		if (role == 3) {$location.url('/admin')};
 	}
 
 	/*
