@@ -1,0 +1,97 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+DROP SCHEMA IF EXISTS `HassansDB` ;
+CREATE SCHEMA IF NOT EXISTS `HassansDB` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `HassansDB` ;
+
+-- -----------------------------------------------------
+-- Table `HassansDB`.`user`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `HassansDB`.`user` ;
+
+CREATE TABLE IF NOT EXISTS `HassansDB`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `password` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `HassansDB`.`car`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `HassansDB`.`car` ;
+
+CREATE TABLE IF NOT EXISTS `HassansDB`.`car` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `brand` VARCHAR(45) NULL,
+  `model` VARCHAR(45) NULL,
+  `year` INT NULL,
+  `milage` INT NULL,
+  `color` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `HassansDB`.`order`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `HassansDB`.`order` ;
+
+CREATE TABLE IF NOT EXISTS `HassansDB`.`order` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `buyerId` INT NULL,
+  `carId` INT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_buyer`
+    FOREIGN KEY (`buyerId`)
+    REFERENCES `HassansDB`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_car`
+    FOREIGN KEY (`carId`)
+    REFERENCES `HassansDB`.`car` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk__idx` ON `HassansDB`.`order` (`buyerId` ASC);
+
+CREATE INDEX `fk_idx` ON `HassansDB`.`order` (`carId` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `HassansDB`.`bid`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `HassansDB`.`bid` ;
+
+CREATE TABLE IF NOT EXISTS `HassansDB`.`bid` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `orderId` INT NULL,
+  `sellerId` INT NULL,
+  `amount` INT NULL,
+  `isReserved` TINYINT(1) NULL DEFAULT false,
+  `hasFinalized` TINYINT(1) NULL DEFAULT false,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_order`
+    FOREIGN KEY (`orderId`)
+    REFERENCES `HassansDB`.`order` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_seller`
+    FOREIGN KEY (`sellerId`)
+    REFERENCES `HassansDB`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_idx` ON `HassansDB`.`bid` (`orderId` ASC);
+
+CREATE INDEX `fk_idx1` ON `HassansDB`.`bid` (`sellerId` ASC);
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -1,0 +1,77 @@
+app.controller("yourController", function($scope, $http) 
+{
+// This function is runned when page is loaded
+window.onload = function(){
+
+	// Code to run at browser load
+};
+
+// Deletes all cookies
+$scope.deleteCookies = function(cookieIdentifier){
+	var cookies = document.cookie.split(";");
+	for (var i = 0; i < cookies.length; i++){
+  		document.cookie = cookies[i].split("=")[0] + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	}
+}
+
+// Checks if the given cookie is set return true if cookie is set 
+// and false if not. 
+$scope.isCookieSet = function(cookieIdentifier){
+
+	var identifier = getCookie(cookieIdentifier);
+
+	if (identifier!="" && identifier!=null)
+	  {
+		return true;
+	  } else {
+		return false;
+	  }
+}
+
+// Returns the value of the cookie given. If no cookie
+// present getCookie returns "".
+function getCookie(cookieName)
+{
+	var name = cookieName + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0; i<ca.length; i++) 
+	{
+		var c = ca[i].trim();
+		if (c.indexOf(name)==0){
+			return c.substring(name.length,c.length);
+		}
+	}
+	return "";
+}
+
+// Set the cookie with the cookieName to the cookieValue  
+function setCookie(cookieName,cookieValue)
+{
+	document.cookie = cookieName+"="+cookieValue + ";";
+}
+
+// ##### EXAMPLE USE! ########
+// Get info from user. Save the info as cookie username and
+// as cookie job
+$scope.processForm = function(){
+
+	var user = $scope.formData.user;
+	var job = $scope.formData.job;
+	if (user!="" && user!=null)
+    {
+    	setCookie("username",user);
+    	setCookie("job",job);
+    }
+}
+
+// ##### EXAMPLE USE! ########
+// Retreve the value of the cookie with identifier username
+// and the cookie with idintifier job.
+$scope.checkCookie = function(){
+			
+    $scope.userFromCookie = getCookie("username");
+	
+    $scope.jobFromCookie = getCookie("job");
+
+	}
+});

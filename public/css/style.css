@@ -1,0 +1,53 @@
+#userOrdersContainer{
+	width:100%;
+	position: relative;
+	float: left;
+}
+
+#userOrdersContainer table,h3{
+	margin-left: 5%;
+}
+#createOrderContainer{
+	width:100%;
+	position: relative;
+	float: left;
+}
+#createOrderContainer h3{
+	margin-left: 0;
+}
+
+#createOrderContainer form{
+	width:30%;
+	margin-left: 5%;
+}
+
+#createOrderContainer input{
+	width:48%;
+	float:left;
+	position: relative;
+	margin-left: 2%;
+}
+
+#createOrderButton{
+	margin-left: 2%;
+}
+
+.numberValue{
+	text-align: right;
+}
+
+table{
+	position: relative;
+	float:left;
+}
+
+.errorMessage
+{
+	color: grey;
+	font-size: 80%;
+}
+
+button{
+	border: solid 1px;
+	border-radius: 5px;
+}
