@@ -23,7 +23,8 @@ app.controller("loginCtrl", function($scope, $http, $location)
 		loginForm.password=$scope.hashSting(loginForm.password);
 		$http({method: 'POST', url: 'json/login/checkUser', data: loginForm}).
 		success(function (data, status, headers, config) {
-			if(data.length=1){
+			
+			if(data[0]!=null){
 				$scope.setCookie('user',data[0].name);
 				$scope.setCookie('role',data[0].role);
 				$scope.redirect(data[0].role);
@@ -63,6 +64,11 @@ app.controller("loginCtrl", function($scope, $http, $location)
 	*/
 	$scope.redirect=function(role)
 	{
+		if (role == 0) {
+			alert("You shall not pass! (Your role is to low)");
+			$location.url('/')
+		};
+
 		if (role == 1) {$location.url('/sales')};
 
 		if (role == 2) {$location.url('/report')};
