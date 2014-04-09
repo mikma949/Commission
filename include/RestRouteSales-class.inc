@@ -102,14 +102,14 @@ class RestRouteSales extends RestRoute
 	{
 		global $db;
 
-		$result = $db->prepare("
+		$result = $db->query("
 			SELECT
 				*
 			FROM
 				city
 			");
 
-		$result->execute();
+		
 		return $result->fetchAll(PDO::FETCH_ASSOC);		
 	}
 
