@@ -4,7 +4,7 @@ app.controller("loginCtrl", function($scope, $http, $location)
 	// Loads templates into id to be called on in the view 
 
 	$scope.templates =
-    { 	loginForm: './modules/login/templates/loginForm1.html' };
+    { 	loginForm: './modules/login/templates/loginForm.html' };
 
 	/*
 	This function is called when user submits login form.
