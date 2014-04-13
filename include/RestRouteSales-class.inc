@@ -22,6 +22,10 @@ class RestRouteSales extends RestRoute
 		{
 			return $this->getReportedDatesForUser($data);
 		}
+		elseif ($p[0] == "getSalesForUserAndDate")
+		{
+			return $this->getSalesForUserAndDate($data);
+		}
 	/*	elseif ($p[0] == "finalizeDeal")
 		{
 			return $this->finalizeDeal($data);
@@ -118,6 +122,45 @@ class RestRouteSales extends RestRoute
 			");
 
 		$result->bindParam(':userName', $data, PDO::PARAM_STR);
+		
+		$result->execute();
+		return $result->fetchAll(PDO::FETCH_ASSOC);	
+	}
+
+	private function getSalesForUserAndDate($data)
+	{
+		global $db;
+
+		$result = $db->prepare("
+			Select user.name name, 
+				IFNULL((SELECT sum(quantity) total FROM Commission.sales
+				where productId =1
+				and salesPersonId = user.name
+				and YEAR(saleDate)=:year
+				and MONTH(saleDate)=:month
+					group by  salesPersonId,productId),0)
+			 as locks,
+				IFNULL((SELECT sum(quantity) total FROM Commission.sales
+				where productId =2
+				and salesPersonId = user.name
+				and YEAR(saleDate)=:year
+				and MONTH(saleDate)=:month
+				group by  salesPersonId,productId),0)
+			 as stocks,
+				IFNULL((SELECT sum(quantity) total FROM Commission.sales
+				where productId =3
+				and salesPersonId = user.name
+				and YEAR(saleDate)=:year
+				and MONTH(saleDate)=:month
+				group by  salesPersonId,productId),0)
+			 as barrels
+				FROM user
+			where name =:userName;
+			");
+
+		$result->bindParam(':userName', $data->userName, PDO::PARAM_STR);
+		$result->bindParam(':year', $data->year, PDO::PARAM_INT);
+		$result->bindParam(':month', $data->month, PDO::PARAM_INT);
 		
 		$result->execute();
 		return $result->fetchAll(PDO::FETCH_ASSOC);	

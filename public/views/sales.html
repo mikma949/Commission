@@ -4,9 +4,10 @@
 	<button ng-click="hej()">hej</button>
 reportedDates: {{reportedDates}}
 	<p>Sales</p>
+	db ut: {{dbut}}
 		<form name="salesUserForm" 
 			ng-model="salesUserForm"
-			ng-submit="updateUserRole(salesUserForm)"
+			ng-submit="getSalesForUserAndDate(salesUserForm)"
 			novalidate>
 
 			<div class"row">

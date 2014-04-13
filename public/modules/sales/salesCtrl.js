@@ -3,6 +3,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	$scope.sales ={};
 	$scope.userName = null;
 	$scope.reportedDates = {};
+	$scope.dbut = {};
 
 	
 	// Loads templates into id to be called on in the view 
@@ -54,12 +55,13 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 		angular.forEach($scope.reportedDates,function(value){
 			
-			if(userForm.date == (value.year + value.month)){
+			if(userForm.date == (value.year + "-" + value.month)){
 				isDateReported=true;
 			}
 			
 		});
-		return isDateReported;
+		//return isDateReported;
+		return false;
 	}
 
 
@@ -79,6 +81,32 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		error(function (data, status, headers, config) {
 			console.log("getReportedDatesForUser: " 
 				+ userName + " FAILED");
+		});	
+	}
+
+	$scope.getSalesForUserAndDate=function(userForm)
+	{
+		
+		userForm.userName = $scope.userName;
+
+		var dateHolder = userForm.date;
+		var dateSplited = dateHolder.split("-");
+
+		userForm.year = dateSplited[0];
+		userForm.month = dateSplited[1];
+
+		$http({method: 'POST', url: 'json/sales/getSalesForUserAndDate', data: userForm}).
+		success(function (data, status, headers, config) {
+			console.log("getSalesForUserAndDate: success")
+
+			console.log("getSalesForUserAndDate answer: " 
+				+ data)
+
+			$scope.dbut = data;
+
+		}).
+		error(function (data, status, headers, config) {
+			console.log("getSalesForUserAndDate: FAILED");
 		});	
 	}
 
