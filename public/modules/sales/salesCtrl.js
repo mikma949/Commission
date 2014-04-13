@@ -25,7 +25,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 
 	$scope.onLoad = function(){
-		alert("sf");
+
 		$scope.retrieveUserNames();
 		$scope.userName = $scope.getCookie('user');
 		
@@ -116,8 +116,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 	$scope.initSales=function(){
 		$scope.retrieveCities();
-		$scope.checkIfReported(20000101);
-		$scope.retrieveItemsSold(20000101,'Micke')
+		$scope.checkIfReported({saleDate:20000101});
 	}
 
 	/*
@@ -154,8 +153,8 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	$scope.checkIfReported=function(saleDate)
 	{
 		
-		console.log("checkIfReported: " +saleDate)
-		$http({method: 'POST', url: 'json/sales/checkIfReported', data: {'saleDate':saleDate}).
+		console.log("checkIfReported: " +saleDate['saleDate'])
+		$http({method: 'POST', url: 'json/sales/checkIfReported', data: saleDate}).
 		success(function (data, status, headers, config) {
 			$scope.sales.reported=data;
 			console.log("Date checked: "+$scope.sales.reported[0].reported);
@@ -182,28 +181,9 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});
 	};
 
-/*
-	Retrieves the amount of each weapons part the user has sold
-	*/
-	$scope.retrieveItemsSold = function (saleDate,user) {
-		
-		console.log("retrieveItemsSold: " +saleDate['saleDate'])
-		$http({method: 'POST', url: 'json/sales/retrieveItemsSold', data: {'saleDate':saleDate, 'user':user}).
-		success(function (data, status, headers, config) {
-			
-		
-		
-		}).
-		error(function (data, status, headers, config) {
-			console.log("Date not checked: "+data);
-		    alert("Failed to add to db");
-		});	
-	};
-
 
 
 // -----<<<<Gammal kod>>>----
-
 	/*
 	This method will retrieve cookies stored by the application 
 	and check if the session information is still valid.
