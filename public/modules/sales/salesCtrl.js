@@ -1,6 +1,8 @@
 app.controller("salesCtrl", function($scope, $http, $location) 
 { 
 	$scope.sales ={};
+	$scope.userName = null;
+	$scope.reportedDates = {};
 
 	
 	// Loads templates into id to be called on in the view 
@@ -10,6 +12,107 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		buyerOrders:'./modules/sales/templates/buyerOrders.html',
 		sellerOrders:'./modules/sales/templates/sellerOrders.html'
 	};
+
+	/* -------- TODO -------
+	kolla att datumet är korrekt
+	Fixa så att submit inte funkar ifall 
+	checkIfDateIsReported == true
+	Lös så att ifall select city inte är
+	valt så disable submit.
+
+	*/
+
+
+
+	$scope.onLoad = function(){
+		alert("sf");
+		$scope.retrieveUserNames();
+		$scope.userName = $scope.getCookie('user');
+		
+		$scope.getReportedDatesForUser(
+			$scope.userName);
+		
+
+
+		// Mickes init
+		$scope.initSales();
+
+	}
+
+	$scope.hej = function(){
+
+		$scope.checkIfDateIsReported();
+		
+	}
+
+	/* 	Returns true if the input date has aleady been
+		reported, else false.
+	*/
+	$scope.checkIfDateIsReported = function(userForm){
+
+		var isDateReported = false;
+
+		angular.forEach($scope.reportedDates,function(value){
+			
+			if(userForm.date == (value.year + value.month)){
+				isDateReported=true;
+			}
+			
+		});
+		return isDateReported;
+	}
+
+
+
+	$scope.getReportedDatesForUser=function(userName)
+	{
+		
+		console.log("getReportedDatesForUser: " + userName)
+		$http({method: 'POST', url: 'json/sales/getReportedDatesForUser', data: userName}).
+		success(function (data, status, headers, config) {
+			console.log("getReportedDatesForUser: " 
+				+ userName + " success");
+			console.log("getReportedDatesForUser answer: " 
+				+ data);
+			$scope.reportedDates = data;
+		}).
+		error(function (data, status, headers, config) {
+			console.log("getReportedDatesForUser: " 
+				+ userName + " FAILED");
+		});	
+	}
+
+	// NOT IN USE
+	$scope.retrieveUserNames = function () {
+		
+		$http({method: 'GET', url: 'json/sales/getAllUsers', data: ""}).
+		success(function (data, status, headers, config) {
+			$scope.usersInDB=data;
+		}).
+		error(function (data, status, headers, config) {
+		    alert("Failed to retrieve users from the db");
+		});
+	};
+
+	// NOT IN USE
+	/*
+	This method will check if the userName exists in the 
+	server detabase
+	*/
+	$scope.checkUsernameValidity=function(userForm)
+	{	
+		var validNewUserName=false;
+		
+		angular.forEach($scope.usersInDB,function(value){
+			if(userForm.user==value.name){
+				validNewUserName=true;
+			}
+		});
+		return validNewUserName;
+	}
+
+
+//  -----<<<< Micke kod >>>>-----
 
 	$scope.initSales=function(){
 		$scope.retrieveCities();
@@ -98,6 +201,8 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	};
 
 
+
+// -----<<<<Gammal kod>>>----
 
 	/*
 	This method will retrieve cookies stored by the application 

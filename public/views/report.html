@@ -1,2 +1,22 @@
 
-report
+<div ng-controller="reportCtrl"
+data-ng-init="onLoad()">
+	<div class="row">
+
+	<h4>Report</h4>
+
+	<table>
+		<tr ng-repeat="dataRow in activeReportsInDb">
+		  	<td class="numberValue">{{dataRow.year}}</td>
+		  	<td class="numberValue">{{dataRow.month}}</td>
+			<td class="numberValue">{{dataRow.salesPerson}}</td>
+		  	<td class="numberValue">{{dataRow.locksSold}}</td>
+		  	<td class="numberValue">{{dataRow.stocksSold}}</td>
+		  	<td class="numberValue">{{dataRow.barrelsSold}}</td>
+		  	<td class="numberValue">{{dataRow.totalSales}}</td>
+		  	<td class="numberValue">{{dataRow.commission}}</td>
+		</tr>
+	</table>	
+
+	</div>
+</div>
