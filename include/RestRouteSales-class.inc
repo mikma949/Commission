@@ -14,10 +14,6 @@ class RestRouteSales extends RestRoute
 		{
 			return $this->place($data);
 		}
-		elseif ($p[0] == "checkIfReported")
-		{
-			return $this->checkIfReported($data);
-		}
 		elseif ($p[0] == "getReportedDatesForUser")
 		{
 			return $this->getReportedDatesForUser($data);
@@ -84,27 +80,6 @@ class RestRouteSales extends RestRoute
 		return $result->fetchAll(PDO::FETCH_ASSOC);	
 	}
 
-
-	private function checkIfReported($data)
-	{
-		global $db;
-
-		$result = $db->prepare("
-			SELECT 
-				reported
-			FROM 
-				report
-			WHERE 
-				year=YEAR(:saleDate)
-				AND 
-				month=MONTH(:saleDate);
-			");
-
-		$result->bindParam(':saleDate', $data->saleDate, PDO::PARAM_STR);
-		
-		$result->execute();
-		return $result->fetchAll(PDO::FETCH_ASSOC);	
-	}
 
 	private function getReportedDatesForUser($data)
 	{

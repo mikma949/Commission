@@ -1,8 +1,8 @@
 app.controller("salesCtrl", function($scope, $http, $location) 
 { 
 	$scope.sales ={};
-	$scope.userName = null;
 	$scope.reportedDates = {};
+	
 
 
 	
@@ -27,27 +27,23 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 	$scope.onLoad = function(){
 
-
-		$scope.userName = $scope.getCookie('user');
-		
-		$scope.getReportedDatesForUser($scope.userName);
-		
 		$scope.retrieveCities();
-	//	$scope.checkIfReported({saleDate:20000101});
-
-
+		$scope.getReportedDatesForUser();
+		
+		
 	}
+
 
 	/* 	Returns true if the input date has aleady been
 		reported, else false.
 	*/
-	$scope.checkIfDateIsReported = function(userForm){
+	$scope.checkIfDateIsReported = function(saleDate){
 
 		var isDateReported = false;
 
 		angular.forEach($scope.reportedDates,function(value){
 			
-			if(userForm.saleDate == (value.year + "-" + value.month)){
+			if(saleDate == (value.year + "-" + value.month)){
 				isDateReported=true;
 			}
 			
@@ -57,9 +53,9 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 
 
-	$scope.getReportedDatesForUser=function(userName)
+	$scope.getReportedDatesForUser=function()
 	{
-		
+		userName=$scope.getCookie('user');
 		console.log("getReportedDatesForUser: " + userName)
 		$http({method: 'POST', url: 'json/sales/getReportedDatesForUser', data: {'userName':userName}}).
 		success(function (data, status, headers, config) {
@@ -77,10 +73,13 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 	$scope.getSalesForUserAndDate=function(userForm)
 	{
-		
-		userForm.userName = $scope.userName;
+		if(userForm.saleDate.length!=10){
+			$scope.sales.itemsSold=null;
+			return;
+		}
+		userForm.userName = $scope.getCookie('user');
 
-		var dateHolder = userForm.date;
+		var dateHolder = userForm.saleDate;
 		var dateSplited = dateHolder.split("-");
 
 		userForm.year = dateSplited[0];
@@ -93,7 +92,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			console.log("getSalesForUserAndDate answer: " 
 				+ data)
 
-			$scope.dbut = data;
+			$scope.sales.itemsSold = data;
 
 		}).
 		error(function (data, status, headers, config) {
@@ -122,6 +121,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		success(function (data, status, headers, config) {
 			alert("Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId);
 			console.log("Sale placed");
+			$scope.getSalesForUserAndDate(salesForm);
 		
 		}).
 		error(function (data, status, headers, config) {
@@ -130,25 +130,6 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});	
 	}
 
-
-	/*
-	Checks if monthly report has been submitted
-	*/
-	$scope.checkIfReported=function(saleDate)
-	{
-		
-		console.log("checkIfReported: " +saleDate['saleDate'])
-		$http({method: 'POST', url: 'json/sales/checkIfReported', data: saleDate}).
-		success(function (data, status, headers, config) {
-			$scope.sales.reported=data;
-			console.log("Date checked: "+$scope.sales.reported[0].reported);
-		
-		}).
-		error(function (data, status, headers, config) {
-			console.log("Date not checked: "+data);
-		    alert("Failed to add to db");
-		});	
-	}	
 
 	/*
 	Retrieves all cities sales can be made in
