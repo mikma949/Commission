@@ -116,7 +116,8 @@ class RestRouteSales extends RestRoute
 			from 
 				report 
 			where 
-				salesPerson=:userName
+
+				salesPerson = :userName 
 			and 
 				reported=1;
 			");

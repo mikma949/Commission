@@ -36,9 +36,6 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	//	$scope.checkIfReported({saleDate:20000101});
 
 
-		// Mickes init
-	
-
 	}
 
 	/* 	Returns true if the input date has aleady been
@@ -55,8 +52,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			}
 			
 		});
-		//return isDateReported;
-		return false;
+		return isDateReported;
 	}
 
 
@@ -105,7 +101,6 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});	
 	}
 
-	
 
 
 //  -----<<<< Micke kod >>>>-----
