@@ -13,7 +13,8 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 	$scope.initSales=function(){
 		$scope.retrieveCities();
-		$scope.checkIfReported({saleDate:20000101});
+		$scope.checkIfReported(20000101);
+		$scope.retrieveItemsSold(20000101,'Micke')
 	}
 
 	/*
@@ -50,8 +51,8 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	$scope.checkIfReported=function(saleDate)
 	{
 		
-		console.log("checkIfReported: " +saleDate['saleDate'])
-		$http({method: 'POST', url: 'json/sales/checkIfReported', data: saleDate}).
+		console.log("checkIfReported: " +saleDate)
+		$http({method: 'POST', url: 'json/sales/checkIfReported', data: {'saleDate':saleDate}).
 		success(function (data, status, headers, config) {
 			$scope.sales.reported=data;
 			console.log("Date checked: "+$scope.sales.reported[0].reported);
@@ -77,6 +78,26 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		    alert("Failed to retrieve cities from the db");
 		});
 	};
+
+/*
+	Retrieves the amount of each weapons part the user has sold
+	*/
+	$scope.retrieveItemsSold = function (saleDate,user) {
+		
+		console.log("retrieveItemsSold: " +saleDate['saleDate'])
+		$http({method: 'POST', url: 'json/sales/retrieveItemsSold', data: {'saleDate':saleDate, 'user':user}).
+		success(function (data, status, headers, config) {
+			
+		
+		
+		}).
+		error(function (data, status, headers, config) {
+			console.log("Date not checked: "+data);
+		    alert("Failed to add to db");
+		});	
+	};
+
+
 
 	/*
 	This method will retrieve cookies stored by the application 
