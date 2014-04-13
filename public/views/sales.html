@@ -1,42 +1,30 @@
 <div ng-controller="salesCtrl" data-ng-init="onLoad()">
 <div class="row">
 <div class="small-12 columns">
-	<button ng-click="hej()">hej</button>
-reportedDates: {{reportedDates}}
-	<p>Sales</p>
-	db ut: {{dbut}}
-		<form name="salesUserForm" 
+	
+
+	<h4>Sales</h4>
+	
+		<form
 			ng-model="salesUserForm"
-			ng-submit="getSalesForUserAndDate(salesUserForm)"
 			novalidate>
 
 			<div class"row">
 			<div class="small-4 columns">
 				
-				<!--input type="text" 
-				ng-model="salesUserForm.user"
-				name="salesUserForm.user"
-				placeholder="User Name" 
-				required/>
-					
-				<p class="errorMessage" 
-				ng-show="checkUsernameValidity(salesUserForm) == false">
-				The username does not exist</p-->
-
-				<p>User: {{userName}}</p>
-
+			
 				<select name="city" 
 				ng-model="salesUserForm.cityId"
-				ng-init="salesUserForm.city='1'"
+				ng-init="salesUserForm.cityId='1'"
 				ng-options="item.id as item.name for item in sales.cities"
 				required>
 				<option value="">Select City</option>
 				</select>
 
 				<input type="text"
-				id="salesUserForm.date"
-				ng-model="salesUserForm.date"
-				name="salesUserForm.date"
+				id="salesUserForm.saleDate"
+				ng-model="salesUserForm.saleDate"
+				name="salesUserForm.saleDate"
 				ng-change=""
 				ng-pattern="/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(199\d|[2-9]\d{3})$/"
 				placeholder="Date" 
@@ -74,14 +62,9 @@ reportedDates: {{reportedDates}}
 				name="salesUserForm.barrelsSold" 
 				placeholder="Barrels Sold" 
 				required />
-
-				
-
-				
-				
-				
+		
 				<button id="submitSaleButton"
-				type="submit">
+				ng-click="place(salesUserForm)">
 				Submit Sale</button>
 				<!--
 				ng-disabled="!(checkUsernameValidity(salesUserForm) &&
@@ -96,6 +79,6 @@ reportedDates: {{reportedDates}}
 
 	
 </div>
-<div class="row" ng-include="templates.salesForm">	</div>
+
 </div>
 </div>

@@ -30,9 +30,10 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		$scope.retrieveUserNames();
 		$scope.userName = $scope.getCookie('user');
 		
-		$scope.getReportedDatesForUser(
-			$scope.userName);
+		$scope.getReportedDatesForUser($scope.userName);
 		
+		$scope.retrieveCities();
+		$scope.checkIfReported({saleDate:20000101});
 
 
 		// Mickes init
@@ -142,22 +143,14 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 //  -----<<<< Micke kod >>>>-----
 
-	$scope.initSales=function(){
-		$scope.retrieveCities();
-		$scope.checkIfReported({saleDate:20000101});
-	}
 
 	/*
 	This method will place a new sale
 	*/
 	$scope.place=function(salesForm)
 	{
-		salesForm.saleDate =20001201;
+		salesForm.salesPersonId=$scope.getCookie('user');
 		
-		salesForm.salesPersonId="Micke";
-		salesForm.locksSold =1;
-		salesForm.stocksSold=2;
-		salesForm.barrelsSold=3;
 		//Set the itemId's
 		salesForm.lock =1;
 		salesForm.stock=2;
