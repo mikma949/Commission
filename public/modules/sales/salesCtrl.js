@@ -1,8 +1,8 @@
 app.controller("salesCtrl", function($scope, $http, $location) 
 { 
 	$scope.sales ={};
-	$scope.userName = null;
 	$scope.reportedDates = {};
+	
 
 
 	
@@ -27,16 +27,13 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 	$scope.onLoad = function(){
 
-
-		$scope.userName = $scope.getCookie('user');
-		
-		$scope.getReportedDatesForUser($scope.userName);
-		
 		$scope.retrieveCities();
-	//	$scope.checkIfReported({saleDate:20000101});
-
-
+		$scope.getReportedDatesForUser();
+		$scope.retrieveProductInfo();
+		$scope.retrieveCommissionData();
+		
 	}
+
 
 	/* 	Returns true if the input date has aleady been
 		reported, else false.
@@ -108,9 +105,9 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		*/
 	}
 
-	$scope.getReportedDatesForUser=function(userName)
+	$scope.getReportedDatesForUser=function()
 	{
-		
+		userName=$scope.getCookie('user');
 		console.log("getReportedDatesForUser: " + userName)
 		$http({method: 'POST', url: 'json/sales/getReportedDatesForUser', data: {'userName':userName}}).
 		success(function (data, status, headers, config) {
@@ -128,8 +125,11 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 	$scope.getSalesForUserAndDate=function(userForm)
 	{
-		
-		userForm.userName = $scope.userName;
+		if(userForm.saleDate.length!=10){
+			$scope.sales.itemsSold=null;
+			return;
+		}
+		userForm.userName = $scope.getCookie('user');
 
 		var dateHolder = userForm.saleDate;
 		var dateSplited = dateHolder.split("-");
@@ -144,8 +144,8 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			console.log("getSalesForUserAndDate answer: " 
 				+ data)
 
-			$scope.dbut = data;
-
+			$scope.sales.itemsSold = data;
+			$scope.setSales();
 		}).
 		error(function (data, status, headers, config) {
 			console.log("getSalesForUserAndDate: FAILED");
@@ -173,6 +173,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		success(function (data, status, headers, config) {
 			alert("Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId);
 			console.log("Sale placed");
+			$scope.getSalesForUserAndDate(salesForm);
 		
 		}).
 		error(function (data, status, headers, config) {
@@ -181,25 +182,6 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});	
 	}
 
-
-	/*
-	Checks if monthly report has been submitted
-	*/
-	$scope.checkIfReported=function(saleDate)
-	{
-		
-		console.log("checkIfReported: " +saleDate['saleDate'])
-		$http({method: 'POST', url: 'json/sales/checkIfReported', data: saleDate}).
-		success(function (data, status, headers, config) {
-			$scope.sales.reported=data;
-			console.log("Date checked: "+$scope.sales.reported[0].reported);
-		
-		}).
-		error(function (data, status, headers, config) {
-			console.log("Date not checked: "+data);
-		    alert("Failed to add to db");
-		});	
-	}	
 
 	/*
 	Retrieves all cities sales can be made in
@@ -216,6 +198,75 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});
 	};
 
+	/*
+	Retrieves info about the products.
+	*/
+	$scope.retrieveProductInfo= function () {
+		
+		$http({method: 'GET', url: 'json/sales/getProductInfo', data: ""}).
+		success(function (data, status, headers, config) {
+			$scope.sales.productInfo=data;
+			console.log("Product info retrieved: "+data);
+		}).
+		error(function (data, status, headers, config) {
+		    alert("Failed to retrieve product info from the db");
+		});
+	};
+
+		/*
+	Retrieves commission boundries and percentages.
+	*/
+	$scope.retrieveCommissionData= function () {
+		
+		$http({method: 'GET', url: 'json/sales/getCommissionData', data: ""}).
+		success(function (data, status, headers, config) {
+			$scope.sales.commissionData=data;
+			console.log("Commission data retrieved: "+data);
+		}).
+		error(function (data, status, headers, config) {
+		    alert("Failed to retrieve commission data from the db");
+		});
+	};
+
+
+// -----<<<< Calculate sales and commission >>>---- 
+	$scope.setSales = function(){
+		$scope.sales.totalSales =0;
+		$scope.sales.productInfo.forEach(function(item){
+			if(item.name == 'Lock'){
+				$scope.sales.totalSales += parseInt(item.price)*parseInt($scope.sales.itemsSold[0].locks);
+			}
+			if(item.name == 'Stock'){
+				$scope.sales.totalSales += parseInt(item.price)*parseInt($scope.sales.itemsSold[0].stocks);
+			}
+			if(item.name == 'Barrel'){
+				$scope.sales.totalSales += parseInt(item.price)*parseInt($scope.sales.itemsSold[0].barrels);
+			}
+			console.log("Set sales: "  +item.name + " "+item.price + " Total: "+$scope.sales.totalSales);
+		});
+		$scope.setCommission();
+	}
+
+	$scope.setCommission = function(){
+		$scope.sales.commission = 0;
+		var percent = 0;
+		var boundry = 0;
+		var restCommission =0;
+		
+		$scope.sales.commissionData.forEach(function(item){
+			if($scope.sales.totalSales>parseInt(item.boundry)){
+				$scope.sales.commission += percent*(parseInt(item.boundry)-boundry);
+				percent = item.percent;
+				boundry = parseInt(item.boundry);
+				restCommission= ($scope.sales.totalSales-boundry)*percent;
+
+				console.log("Set commission: "  +item.percent + " "+item.boundry 
+					+ " Total: "+$scope.sales.commission +" Rest: " +restCommission);
+			}
+		});	
+		$scope.sales.commission += restCommission;
+		console.log("Set commission: Total: "+$scope.sales.commission);
+	}
 
 
 // -----<<<<Gammal kod>>>----

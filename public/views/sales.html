@@ -5,8 +5,12 @@
 
 	<h4>Sales</h4>
 
-	User: {{userName}}
-	Reported dates: {{reportedDates}}
+	User: {{getCookie('user')}} <br>
+	Reported dates: {{reportedDates}} <br>
+	Sold this month: {{sales.itemsSold}} <br>
+	Product info: {{sales.productInfo}} <br>
+	Total Sales this month: {{sales.totalSales}} <br>
+	Commission this month: {{sales.commission}} <br>
 
 		<form
 			ng-model="salesUserForm"
@@ -28,7 +32,7 @@
 				id="salesUserForm.saleDate"
 				ng-model="salesUserForm.saleDate"
 				name="salesUserForm.saleDate"
-				ng-change=""
+				ng-change="getSalesForUserAndDate(salesUserForm)"
 				placeholder="Date" 
 				required />
 
