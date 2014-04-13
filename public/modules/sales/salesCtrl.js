@@ -3,7 +3,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	$scope.sales ={};
 	$scope.userName = null;
 	$scope.reportedDates = {};
-	$scope.dbut = {};
+
 
 	
 	// Loads templates into id to be called on in the view 
@@ -27,24 +27,18 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 	$scope.onLoad = function(){
 
-		$scope.retrieveUserNames();
+
 		$scope.userName = $scope.getCookie('user');
 		
 		$scope.getReportedDatesForUser($scope.userName);
 		
 		$scope.retrieveCities();
-		$scope.checkIfReported({saleDate:20000101});
+	//	$scope.checkIfReported({saleDate:20000101});
 
 
 		// Mickes init
-		$scope.initSales();
+	
 
-	}
-
-	$scope.hej = function(){
-
-		$scope.checkIfDateIsReported();
-		
 	}
 
 	/* 	Returns true if the input date has aleady been
@@ -56,7 +50,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 		angular.forEach($scope.reportedDates,function(value){
 			
-			if(userForm.date == (value.year + "-" + value.month)){
+			if(userForm.saleDate == (value.year + "-" + value.month)){
 				isDateReported=true;
 			}
 			
@@ -71,7 +65,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	{
 		
 		console.log("getReportedDatesForUser: " + userName)
-		$http({method: 'POST', url: 'json/sales/getReportedDatesForUser', data: userName}).
+		$http({method: 'POST', url: 'json/sales/getReportedDatesForUser', data: {'userName':userName}}).
 		success(function (data, status, headers, config) {
 			console.log("getReportedDatesForUser: " 
 				+ userName + " success");
@@ -111,34 +105,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});	
 	}
 
-	// NOT IN USE
-	$scope.retrieveUserNames = function () {
-		
-		$http({method: 'GET', url: 'json/sales/getAllUsers', data: ""}).
-		success(function (data, status, headers, config) {
-			$scope.usersInDB=data;
-		}).
-		error(function (data, status, headers, config) {
-		    alert("Failed to retrieve users from the db");
-		});
-	};
-
-	// NOT IN USE
-	/*
-	This method will check if the userName exists in the 
-	server detabase
-	*/
-	$scope.checkUsernameValidity=function(userForm)
-	{	
-		var validNewUserName=false;
-		
-		angular.forEach($scope.usersInDB,function(value){
-			if(userForm.user==value.name){
-				validNewUserName=true;
-			}
-		});
-		return validNewUserName;
-	}
+	
 
 
 //  -----<<<< Micke kod >>>>-----
@@ -166,7 +133,8 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 		    alert("Failed to add to db");
 		});	
-	}	
+	}
+
 
 	/*
 	Checks if monthly report has been submitted

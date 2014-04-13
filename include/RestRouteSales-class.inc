@@ -116,12 +116,12 @@ class RestRouteSales extends RestRoute
 			from 
 				report 
 			where 
-				salesPerson = 'abbe' 
+				salesPerson=:userName
 			and 
-				reported = 1;
+				reported=1;
 			");
 
-		$result->bindParam(':userName', $data, PDO::PARAM_STR);
+		$result->bindParam(':userName', $data->userName, PDO::PARAM_STR);
 		
 		$result->execute();
 		return $result->fetchAll(PDO::FETCH_ASSOC);	

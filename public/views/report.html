@@ -6,6 +6,14 @@ data-ng-init="onLoad()">
 	<h4>Report</h4>
 
 	<table>
+			<th>Year</th>
+			<th>Month</th>
+			<th>Seller</th>
+			<th>Locks</th>
+			<th>Stocks</th>
+			<th>Barrels</th>
+			<th>Sales</th>
+			<th>Commission</th>
 		<tr ng-repeat="dataRow in activeReportsInDb">
 		  	<td class="numberValue">{{dataRow.year}}</td>
 		  	<td class="numberValue">{{dataRow.month}}</td>
