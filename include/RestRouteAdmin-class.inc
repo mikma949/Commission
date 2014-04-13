@@ -8,6 +8,16 @@ require_once("RestRoute-class.inc");
 class RestRouteAdmin extends RestRoute
 {
 
+	//This method has to change the call function
+	function get($p)
+	{
+		if ($p[0] == "getAllUsers")
+		{
+			return $this->getAllUsers();
+		}
+		return false;
+	}
+
 	function put($p, $data)
 	{
 		if ($p[0] == "updateUser")
@@ -35,6 +45,19 @@ class RestRouteAdmin extends RestRoute
 		$result->execute();
 		return $result;
 		
+	}
+	private function getAllUsers()
+	{
+		global $db;
+
+		$result = $db->query("
+			SELECT
+				*
+			FROM
+				user
+			");
+
+		return $result->fetchAll(PDO::FETCH_ASSOC);
 	}
 }
 ?>

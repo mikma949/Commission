@@ -1,11 +1,95 @@
+<div ng-controller="salesCtrl" data-ng-init="onLoad()">
+<div class="row">
+<div class="small-12 columns">
+	<button ng-click="hej()">hej</button>
+reportedDates: {{reportedDates}}
+	<p>Sales</p>
+		<form name="salesUserForm" 
+			ng-model="salesUserForm"
+			ng-submit="updateUserRole(salesUserForm)"
+			novalidate>
+
+			<div class"row">
+			<div class="small-4 columns">
+				
+				<!--input type="text" 
+				ng-model="salesUserForm.user"
+				name="salesUserForm.user"
+				placeholder="User Name" 
+				required/>
+					
+				<p class="errorMessage" 
+				ng-show="checkUsernameValidity(salesUserForm) == false">
+				The username does not exist</p-->
+
+				<p>User: {{userName}}</p>
+
+				<select name="city" 
+				ng-model="salesUserForm.cityId"
+				ng-init="salesUserForm.city='1'"
+				ng-options="item.id as item.name for item in sales.cities"
+				required>
+				<option value="">Select City</option>
+				</select>
+
+				<input type="text"
+				id="salesUserForm.date"
+				ng-model="salesUserForm.date"
+				name="salesUserForm.date"
+				ng-change=""
+				placeholder="Date" 
+				required />
+
+				<p class="errorMessage" 
+				ng-show="checkIfDateIsReported(salesUserForm) == true">
+				This month is already reported</p>
+				
+				<input type="text"
+				id="salesUserForm.locksSold"
+				ng-model="salesUserForm.locksSold"
+				name="salesUserForm.locksSold" 
+				placeholder="Locks Sold" 
+				required />
+
+				<p class="errorMessage" 
+				ng-show="validRole(salesUserForm) == false">
+				You can't sell these many locks. Only {{locksLeft}} locks left</p>
+
+				<input type="text"
+				id="salesUserForm.stocksSold"
+				ng-model="salesUserForm.stocksSold"
+				name="salesUserForm.stocksSold" 
+				placeholder="Stocks Sold" 
+				required />
+
+				<input type="text"
+				id="salesUserForm.barrelsSold"
+				ng-model="salesUserForm.barrelsSold"
+				name="salesUserForm.barrelsSold" 
+				placeholder="Barrels Sold" 
+				required />
+
+				
+
+				
+				
+				
+				<button id="submitSaleButton"
+				type="submit">
+				Submit Sale</button>
+				<!--
+				ng-disabled="!(checkUsernameValidity(salesUserForm) &&
+				validRole(salesUserForm))"
+				-->
+			</div>
+			</div>		
+		</form>
 
 
-<!-- FORM -->
-<!-- pass in the variable if our form is valid or invalid -->
-<div ng-controller="salesCtrl" data-ng-init="initSales()">
 
 
-	<!-- SUBMIT BUTTON -->
-	<div ng-include="templates.salesForm">	</div>
 	
+</div>
+<div class="row" ng-include="templates.salesForm">	</div>
+</div>
 </div>

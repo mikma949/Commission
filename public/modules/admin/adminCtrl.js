@@ -12,7 +12,7 @@ app.controller("adminCtrl", function($scope, $http, $location)
 
 	$scope.retrieveUserNames = function () {
 		
-		$http({method: 'GET', url: 'json/user/getAllUsers', data: ""}).
+		$http({method: 'GET', url: 'json/admin/getAllUsers', data: ""}).
 		success(function (data, status, headers, config) {
 			$scope.usersInDB=data;
 		}).

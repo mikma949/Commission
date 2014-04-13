@@ -18,6 +18,10 @@ class RestRouteSales extends RestRoute
 		{
 			return $this->checkIfReported($data);
 		}
+		elseif ($p[0] == "getReportedDatesForUser")
+		{
+			return $this->getReportedDatesForUser($data);
+		}
 	/*	elseif ($p[0] == "finalizeDeal")
 		{
 			return $this->finalizeDeal($data);
@@ -38,6 +42,10 @@ class RestRouteSales extends RestRoute
 			{
 				return $this->getUser($data);
 			}*/
+			elseif ($p[0] == "getAllUsers")
+			{
+				return $this->getAllUsers();
+			}
 			return false;
 	}
 
@@ -94,6 +102,27 @@ class RestRouteSales extends RestRoute
 		return $result->fetchAll(PDO::FETCH_ASSOC);	
 	}
 
+	private function getReportedDatesForUser($data)
+	{
+		global $db;
+
+		$result = $db->prepare("
+			select 
+				year,month 
+			from 
+				report 
+			where 
+				salesPerson = 'abbe' 
+			and 
+				reported = 1;
+			");
+
+		$result->bindParam(':userName', $data, PDO::PARAM_STR);
+		
+		$result->execute();
+		return $result->fetchAll(PDO::FETCH_ASSOC);	
+	}
+
 
 /*
 ======= GET =======
@@ -111,6 +140,19 @@ class RestRouteSales extends RestRoute
 
 		$result->execute();
 		return $result->fetchAll(PDO::FETCH_ASSOC);		
+	}
+	private function getAllUsers()
+	{
+		global $db;
+
+		$result = $db->query("
+			SELECT
+				*
+			FROM
+				user
+			");
+
+		return $result->fetchAll(PDO::FETCH_ASSOC);
 	}
 
 

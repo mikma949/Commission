@@ -1,5 +1,7 @@
 app.controller("reportCtrl", function($scope, $http, $location) 
 {
+	$scope.activeReportsInDb=null;
+
 	// Loads templates into id to be called on in the view 
 	$scope.templates=
     {	
@@ -7,8 +9,23 @@ app.controller("reportCtrl", function($scope, $http, $location)
     	placeBid:'./modules/bid/templates/placeBid.html',
 		reserveOrder:'./modules/bid/templates/reserveOrder.html'
 	};
-	
-	
+
+	$scope.onLoad = function(){
+		console.log("onload");
+		$scope.activeReportsInDb = $scope.retrieveActiveReports();		
+	}
+
+	$scope.retrieveActiveReports = function () {
+		
+		$http({method: 'GET', url: 'json/report/getActiveReports', data: ""}).
+		success(function (data, status, headers, config) {
+			$scope.activeReportsInDb=data;
+		}).
+		error(function (data, status, headers, config) {
+		    alert("Failed to retrieve users from the db");
+		});
+		return $scope.activeReportsInDb;
+	};
 
 	/*
 	This method will retrieve cookies stored by the application 
