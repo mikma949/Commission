@@ -37,14 +37,18 @@ class RestRouteSales extends RestRoute
 			if ($p[0] == "getCities")
 			{
 				return $this->getCities();
-			}/*
-			elseif ($p[0] == "getUser")
+			}
+			elseif ($p[0] == "getProductInfo")
 			{
-				return $this->getUser($data);
-			}*/
+				return $this->getProductInfo();
+			}
 			elseif ($p[0] == "getAllUsers")
 			{
 				return $this->getAllUsers();
+			}
+			elseif ($p[0] == "getCommissionData")
+			{
+				return $this->getCommissionData();
 			}
 			return false;
 	}
@@ -150,16 +154,35 @@ class RestRouteSales extends RestRoute
 	{
 		global $db;
 
-		$result = $db->prepare("
+		$result = $db->query("
 			SELECT
 				*
 			FROM
 				city
 			");
 
-		$result->execute();
+	
 		return $result->fetchAll(PDO::FETCH_ASSOC);		
 	}
+	
+
+	private function getProductInfo()
+	{
+		global $db;
+
+		$result = $db->query("
+			SELECT
+				*
+			FROM
+				product
+			");
+
+	
+		return $result->fetchAll(PDO::FETCH_ASSOC);		
+	}
+
+
+
 	private function getAllUsers()
 	{
 		global $db;
@@ -169,6 +192,21 @@ class RestRouteSales extends RestRoute
 				*
 			FROM
 				user
+			");
+
+		return $result->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+
+	private function getCommissionData()
+	{
+		global $db;
+
+		$result = $db->query("
+			SELECT
+				*
+			FROM
+				commission
 			");
 
 		return $result->fetchAll(PDO::FETCH_ASSOC);

@@ -29,7 +29,8 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 		$scope.retrieveCities();
 		$scope.getReportedDatesForUser();
-		
+		$scope.retrieveProductInfo();
+		$scope.retrieveCommissionData();
 		
 	}
 
@@ -93,7 +94,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 				+ data)
 
 			$scope.sales.itemsSold = data;
-
+			$scope.setSales();
 		}).
 		error(function (data, status, headers, config) {
 			console.log("getSalesForUserAndDate: FAILED");
@@ -146,6 +147,75 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});
 	};
 
+	/*
+	Retrieves info about the products.
+	*/
+	$scope.retrieveProductInfo= function () {
+		
+		$http({method: 'GET', url: 'json/sales/getProductInfo', data: ""}).
+		success(function (data, status, headers, config) {
+			$scope.sales.productInfo=data;
+			console.log("Product info retrieved: "+data);
+		}).
+		error(function (data, status, headers, config) {
+		    alert("Failed to retrieve product info from the db");
+		});
+	};
+
+		/*
+	Retrieves commission boundries and percentages.
+	*/
+	$scope.retrieveCommissionData= function () {
+		
+		$http({method: 'GET', url: 'json/sales/getCommissionData', data: ""}).
+		success(function (data, status, headers, config) {
+			$scope.sales.commissionData=data;
+			console.log("Commission data retrieved: "+data);
+		}).
+		error(function (data, status, headers, config) {
+		    alert("Failed to retrieve commission data from the db");
+		});
+	};
+
+
+// -----<<<< Calculate sales and commission >>>---- 
+	$scope.setSales = function(){
+		$scope.sales.totalSales =0;
+		$scope.sales.productInfo.forEach(function(item){
+			if(item.name == 'Lock'){
+				$scope.sales.totalSales += parseInt(item.price)*parseInt($scope.sales.itemsSold[0].locks);
+			}
+			if(item.name == 'Stock'){
+				$scope.sales.totalSales += parseInt(item.price)*parseInt($scope.sales.itemsSold[0].stocks);
+			}
+			if(item.name == 'Barrel'){
+				$scope.sales.totalSales += parseInt(item.price)*parseInt($scope.sales.itemsSold[0].barrels);
+			}
+			console.log("Set sales: "  +item.name + " "+item.price + " Total: "+$scope.sales.totalSales);
+		});
+		$scope.setCommission();
+	}
+
+	$scope.setCommission = function(){
+		$scope.sales.commission = 0;
+		var percent = 0;
+		var boundry = 0;
+		var restCommission =0;
+		
+		$scope.sales.commissionData.forEach(function(item){
+			if($scope.sales.totalSales>parseInt(item.boundry)){
+				$scope.sales.commission += percent*(parseInt(item.boundry)-boundry);
+				percent = item.percent;
+				boundry = parseInt(item.boundry);
+				restCommission= ($scope.sales.totalSales-boundry)*percent;
+
+				console.log("Set commission: "  +item.percent + " "+item.boundry 
+					+ " Total: "+$scope.sales.commission +" Rest: " +restCommission);
+			}
+		});	
+		$scope.sales.commission += restCommission;
+		console.log("Set commission: Total: "+$scope.sales.commission);
+	}
 
 
 // -----<<<<Gammal kod>>>----
