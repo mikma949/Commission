@@ -33,8 +33,12 @@
 				required />
 
 				<p class="errorMessage" 
-				ng-show="checkIfDateIsReported(salesUserForm) == true">
+				ng-show="checkIfDateIsReported(salesUserForm.saleDate) == true">
 				This month is already reported</p>
+
+				<p class="errorMessage" 
+				ng-show="controllUserInputFormatForSaleDate(salesUserForm.saleDate) == false">
+				Invalid date format. Use yyyy-mm-dd</p>
 				
 				<input type="text"
 				id="salesUserForm.locksSold"
@@ -62,14 +66,54 @@
 				required />
 		
 				<button id="submitSaleButton"
-				ng-click="place(salesUserForm)">
+				ng-click="place(salesUserForm)"
+				ng-disabled="
+				!(!checkIfDateIsReported(salesUserForm.saleDate) &&
+				controllUserInputFormatForSaleDate(
+				salesUserForm.saleDate))">
 				Submit Sale</button>
-				<!--
-				ng-disabled="!(checkUsernameValidity(salesUserForm) &&
-				validRole(salesUserForm))"
-				-->
+				
 			</div>
+			<div class="small-9 columns"></div>
 			</div>		
+		</form>
+
+
+		<form
+		ng-model="submitMonthForm"
+		ng-submit="reportMonth(submitMonthForm.reportDate)"
+		novalidate>
+
+			<div class"row">
+			<div class="small-4 columns">
+			<h4>Report</h4>
+
+				<input type="text"
+				id="submitMonthForm.reportDate"
+				ng-model="submitMonthForm.reportDate"
+				name="submitMonthForm.reportDate"
+				ng-change=""
+				placeholder="Date" 
+				required />
+
+				<p class="errorMessage" 
+				ng-show="checkIfDateIsReported(submitMonthForm.reportDate) == true">
+				This month is already reported</p>
+
+				<p class="errorMessage" 
+				ng-show="controllUserInputFormatForReport(submitMonthForm.reportDate) == false">
+				Invalid date format. Use yyyy-mm</p>
+
+
+				<button id="submitSaleButton"
+				ng-disabled="
+				!(!checkIfDateIsReported(submitMonthForm.reportDate) &&
+				controllUserInputFormatForReport(submitMonthForm.reportDate))">
+				Submit Report</button>
+				
+			</div>
+			</div>
+
 		</form>
 
 

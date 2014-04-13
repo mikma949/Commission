@@ -41,21 +41,72 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	/* 	Returns true if the input date has aleady been
 		reported, else false.
 	*/
-	$scope.checkIfDateIsReported = function(userForm){
+	$scope.checkIfDateIsReported = function(saleDate){
 
 		var isDateReported = false;
 
-		angular.forEach($scope.reportedDates,function(value){
-			
-			if(userForm.saleDate == (value.year + "-" + value.month)){
-				isDateReported=true;
-			}
-			
-		});
+		if (saleDate!=null) {
+			var dateSplited = saleDate.split("-");
+			var yearAndMonthInput = dateSplited[0] + "-" +
+				dateSplited[1];
+
+			angular.forEach($scope.reportedDates,function(value){
+				
+				if(yearAndMonthInput == (value.year + "-" + value.month)){
+					isDateReported=true;
+				}
+				
+			});
+		};
 		return isDateReported;
 	}
 
+	$scope.controllUserInputFormatForSaleDate = function(saleDate){
 
+		if (saleDate!=null) {
+			var res = saleDate.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}/);
+			if (res != saleDate) {
+				return false;
+			};
+		};
+		return true;
+	}
+
+	$scope.controllUserInputFormatForReport = function(saleDate){
+
+		if (saleDate!=null) {
+			var res = saleDate.match(/^[0-9]{4}-[0-9]{2}/);
+			if (res != saleDate) {
+				return false;
+			};
+		};
+		return true;
+	}
+
+	$scope.reportMonth = function(reportDate){
+		userForm = {};
+		var dateSplit = reportDate.split("-");
+		userForm.reportYear = dateSplit[0];
+		userForm.reportMonth = dateSplit[1];
+		userForm.userName = $scope.getCookie('user');
+
+		alert("userName: " + userForm.userName +
+			" year: " + userForm.reportYear + 
+			" month: " + userForm.reportMonth);
+
+		/*
+		$http({method: 'POST', url: 'json/sales/reportMonth', data: userForm}).
+		success(function (data, status, headers, config) {
+			console.log("reportMonth: success");
+			console.log("reportMonth answer: " 
+				+ data);
+
+		}).
+		error(function (data, status, headers, config) {
+			console.log("reportMonth: FAILED");
+		});
+		*/
+	}
 
 	$scope.getReportedDatesForUser=function(userName)
 	{
@@ -80,7 +131,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		
 		userForm.userName = $scope.userName;
 
-		var dateHolder = userForm.date;
+		var dateHolder = userForm.saleDate;
 		var dateSplited = dateHolder.split("-");
 
 		userForm.year = dateSplited[0];

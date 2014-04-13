@@ -26,6 +26,10 @@ class RestRouteSales extends RestRoute
 		{
 			return $this->getSalesForUserAndDate($data);
 		}
+		elseif ($p[0] == "reportMonth")
+		{
+			return $this->reportMonth($data);
+		}
 	/*	elseif ($p[0] == "finalizeDeal")
 		{
 			return $this->finalizeDeal($data);
@@ -162,6 +166,22 @@ class RestRouteSales extends RestRoute
 		$result->bindParam(':userName', $data->userName, PDO::PARAM_STR);
 		$result->bindParam(':year', $data->year, PDO::PARAM_INT);
 		$result->bindParam(':month', $data->month, PDO::PARAM_INT);
+		
+		$result->execute();
+		return $result->fetchAll(PDO::FETCH_ASSOC);	
+	}
+	
+	private function reportMonth($data)
+	{
+		global $db;
+
+		$result = $db->prepare("
+			insert into 
+				report (year, month, salesPerson, locksSold, stocksSold, barrelsSold, totalSales, commission, reported) 
+			values (2000, 1, 'test' , 3, 1, 2, 10, 1,1);
+			");
+
+		$result->bindParam(':userName', $data->userName, PDO::PARAM_STR);
 		
 		$result->execute();
 		return $result->fetchAll(PDO::FETCH_ASSOC);	
