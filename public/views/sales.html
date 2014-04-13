@@ -4,7 +4,8 @@
 	
 
 	<h4>Sales</h4>
-	
+	User: {{userName}}
+	Reported dates: {{reportedDates}}
 		<form
 			ng-model="salesUserForm"
 			novalidate>
@@ -26,17 +27,12 @@
 				ng-model="salesUserForm.saleDate"
 				name="salesUserForm.saleDate"
 				ng-change=""
-				ng-pattern="/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/(199\d|[2-9]\d{3})$/"
 				placeholder="Date" 
 				required />
 
 				<p class="errorMessage" 
 				ng-show="checkIfDateIsReported(salesUserForm) == true">
 				This month is already reported</p>
-
-				<p class="errorMessage"
-				ng-show="salesUserForm.salesUserForm.date.$error.pattern" 
-				>Not valid format</p>
 				
 				<input type="text"
 				id="salesUserForm.locksSold"
