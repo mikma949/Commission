@@ -154,4 +154,7 @@ app.controller("createUserCtrl", function($scope, $http, $location)
 			return false;
 		  }
 	}
+	$scope.redirect = function(){
+		$location.url('/');
+	}
 });
