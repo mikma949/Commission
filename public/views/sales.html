@@ -25,14 +25,13 @@
 				ng-init="salesUserForm.cityId='1'"
 				ng-options="item.id as item.name for item in sales.cities"
 				required>
-				<option value="">Select City</option>
 				</select>
 
 				<input type="text"
 				id="salesUserForm.saleDate"
 				ng-model="salesUserForm.saleDate"
 				name="salesUserForm.saleDate"
-				ng-change="getSalesForUserAndDate(salesUserForm)"
+				ng-change="getSalesForUserAndDate(salesUserForm.saleDate)"
 				placeholder="Date" 
 				required />
 
@@ -96,7 +95,7 @@
 				id="submitMonthForm.reportDate"
 				ng-model="submitMonthForm.reportDate"
 				name="submitMonthForm.reportDate"
-				ng-change=""
+				ng-change="getSalesForUserAndDate(submitMonthForm.reportDate)"
 				placeholder="Date" 
 				required />
 
