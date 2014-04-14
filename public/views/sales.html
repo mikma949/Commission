@@ -11,7 +11,9 @@
 	Product info: {{sales.productInfo}} <br>
 	Total Sales this month: {{sales.totalSales}} <br>
 	Commission this month: {{sales.commission}} <br>
-
+	<div ><h3>
+		{{sales.salesInfo}}  </h3>
+	</div>
 		<form
 			ng-model="salesUserForm"
 			novalidate>
@@ -30,6 +32,7 @@
 				<input type="text"
 				id="salesUserForm.saleDate"
 				ng-model="salesUserForm.saleDate"
+				ng-init="salesUserForm.saleDate=today"
 				name="salesUserForm.saleDate"
 				ng-change="getSalesForUserAndDate(salesUserForm.saleDate)"
 				placeholder="Date" 
@@ -70,6 +73,7 @@
 		
 				<button id="submitSaleButton"
 				ng-click="place(salesUserForm)"
+				name="submitSaleButton"
 				ng-disabled="
 				!(!checkIfDateIsReported(salesUserForm.saleDate) &&
 				controllUserInputFormatForSaleDate(
