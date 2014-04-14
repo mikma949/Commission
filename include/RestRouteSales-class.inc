@@ -69,15 +69,16 @@ class RestRouteSales extends RestRoute
 
 		$result = $db->prepare("
 			INSERT INTO 
-				sales (saleDate ,salesPersonId, productId, quantity)
+				sales (saleDate ,salesPersonId, cityId, productId, quantity)
 			VALUES
-				(:saleDate,:salesPersonId,:lock,:locksSold),
-				(:saleDate,:salesPersonId,:stock,:stocksSold),
-				(:saleDate,:salesPersonId,:barrel,:barrelsSold)
+				(:saleDate,:salesPersonId,:cityId,:lock,:locksSold),
+				(:saleDate,:salesPersonId,:cityId,:stock,:stocksSold),
+				(:saleDate,:salesPersonId,:cityId,:barrel,:barrelsSold)
 			");
 
 		$result->bindParam(':saleDate', $data->saleDate, PDO::PARAM_STR);
 		$result->bindParam(':salesPersonId', $data->salesPersonId, PDO::PARAM_STR);
+		$result->bindParam(':cityId', $data->cityId, PDO::PARAM_INT);
 		$result->bindParam(':lock', $data->lock, PDO::PARAM_INT);
 		$result->bindParam(':stock', $data->stock, PDO::PARAM_INT);
 		$result->bindParam(':barrel', $data->barrel, PDO::PARAM_INT);

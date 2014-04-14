@@ -100,6 +100,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	}
 
 	$scope.reportMonth = function(reportDate){
+		$scope.sales.reportSuccess =null;
 		userForm = {};
 		var dateSplit = reportDate.split("-");
 		userForm.reportYear = dateSplit[0];
@@ -128,8 +129,11 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			console.log("reportMonth: success");
 			console.log("reportMonth answer: " 
 				+ data);
-			alert("Report success");
-			location.reload();
+			//alert("Report success");
+			$scope.sales.reportSuccess = "Report for " 
+				+userForm.reportYear +"-"+userForm.reportMonth +" is sent";
+			$scope.onLoad();
+			//location.reload();
 		}).
 		error(function (data, status, headers, config) {
 			console.log("reportMonth: FAILED");
@@ -156,11 +160,11 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});	
 	}
 
-	$scope.getSalesForUserAndDate=function(saleDate)
+	$scope.getSalesForUserAndDate=function()
 	{
 		var userForm = {};
-
-		if(saleDate.length!=7){
+		var saleDate = $scope.salesUserForm.saleDate;
+		if(saleDate.length<7){
 			$scope.sales.itemsSold=null;
 			return;
 		}
@@ -208,7 +212,6 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		$http({method: 'POST', url: 'json/sales/place', data: salesForm}).
 		success(function (data, status, headers, config) {
 			//alert("Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId);
-			$scope.saleSuccess = true;
 			$scope.sales.salesInfo="Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId;
 			console.log("Sale placed");
 			$scope.getSalesForUserAndDate(salesForm);

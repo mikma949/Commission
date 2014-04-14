@@ -33,8 +33,9 @@
 				id="salesUserForm.saleDate"
 				ng-model="salesUserForm.saleDate"
 				ng-init="salesUserForm.saleDate=today"
+				ng-init="getSalesForUserAndDate()"
 				name="salesUserForm.saleDate"
-				ng-change="getSalesForUserAndDate(salesUserForm.saleDate)"
+				ng-change="getSalesForUserAndDate()"
 				placeholder="Date" 
 				required />
 
@@ -112,11 +113,13 @@
 				Invalid date format. Use yyyy-mm</p>
 
 
-				<button id="submitSaleButton"
+				<button id="submitReportButton"
+				name="submitReportButton"
 				ng-disabled="
 				!(!checkIfDateIsReported(submitMonthForm.reportDate) &&
 				controllUserInputFormatForReport(submitMonthForm.reportDate))">
-				Submit Report</button>
+				Submit Report</button> <br>
+				{{sales.reportSuccess}}
 				
 			</div>
 			</div>
