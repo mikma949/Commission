@@ -260,7 +260,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			//alert("Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId);
 			$scope.sales.salesInfo="Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId;
 			console.log("Sale placed");
-			$scope.getSalesForUserAndDate(salesForm);
+			$scope.getSalesForUserAndDate(salesForm.saleDate);
 			$scope.salesUserForm.locksSold=null;
 			$scope.salesUserForm.stocksSold=null;
 			$scope.salesUserForm.barrelsSold=null;
