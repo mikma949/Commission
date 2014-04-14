@@ -39,21 +39,23 @@
 	</header>
 
 	<nav class="top-bar" data-topbar ng-controller="loginCtrl">
-		<section class="top-bar-section">
-			<ul class="right">
-				
-			</ul>
+		
+		<div class="small-4 small-centered columns">
+			<section class="top-bar-section">
+				<ul class="left">
+					<li class="userName">
+						<a>Welcome {{retrieveAndCheckCookie()}}!</a>
+					</li>
+				</ul>
 
-			<ul class="left">
-				<li class="userName">
-					<a>Welcome {{retrieveAndCheckCookie()}}!</a>
-				</li>
+				<ul class="right">
 					<li ng-show="isCookieSet('user')"
-					class="logOutButton">
-					<a ng-click="redirect(0)">Log out</a>
-				</li>	
-			</ul>
-		</section>
+						class="logOutButton">
+						<a ng-click="redirect(0)">Log out</a>
+					</li>	
+				</ul>
+			</section>
+		</div>
 	</nav>
 	<div id="mainContainer">
 		<div ng-view></div>

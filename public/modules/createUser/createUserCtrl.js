@@ -4,7 +4,7 @@ app.controller("createUserCtrl", function($scope, $http, $location)
 	// Loads templates into id to be called on in the view 
 
 	$scope.templates =
-    { createUserForm: 'modules/createUser/templates/createUserForm.html'};
+    { createUserForm: 'modules/createUser/templates/createUserForm1.html'};
 
     $scope.onLoad = function (){
 		$scope.loadUserNames();

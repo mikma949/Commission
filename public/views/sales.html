@@ -1,19 +1,11 @@
 <div ng-controller="salesCtrl" data-ng-init="onLoad()">
 <div class="row">
 <div class="small-12 columns">
-	
-
-	
-	
-	<div ><h3>
-		{{sales.salesInfo}}  </h3>
-	</div>
-		<form
-			ng-model="salesUserForm"
-			novalidate>
-
-			<div class"row">
-			<div class="small-4 columns">
+	<form
+		ng-model="salesUserForm"
+		novalidate>
+		<div class"row">
+			<div class="small-4 columns panel">
 				<h4>Sales</h4>
 			
 				<select name="city" 
@@ -96,23 +88,25 @@
 				controllItemsLeft(salesUserForm.barrelsSold,3))">
 				Submit Sale</button>
 				
-				<br>
-				Total Sales this month: {{sales.totalSales}} <br>
-				Commission this month: {{sales.commission}} <br>
+				<h3>{{sales.salesInfo}}</h3>
 			</div>
 			<div class="small-3 columns">
 				<br>
 				<br>
 				<br>
-				<h5> Sold this month <br>
+				<h5> 
+				Sold this month <br>
 				Locks: {{sales.itemsSold[0].locks}} <br>
-				Stocks: {{sales.itemsSold[0].stocks}}<br>
-				Barrels: {{sales.itemsSold[0].barrels}}
-				</h5><br>
-				<h5> Left in stock this month <br>
+				Stocks: {{sales.itemsSold[0].stocks}} <br>
+				Barrels: {{sales.itemsSold[0].barrels}} <br>
+				<br>				
+				Left in stock this month <br>
 				Locks: {{maxLocksToSell - sales.itemsSold[0].locks}} <br>
 				Stocks: {{maxStocksToSell - sales.itemsSold[0].stocks}} <br>
-				Barrels: {{maxBarrelsToSell - sales.itemsSold[0].barrels}}	
+				Barrels: {{maxBarrelsToSell - sales.itemsSold[0].barrels}}<br>
+				<br>
+				Total Sales this month: {{sales.totalSales}} <br>
+				Commission this month: {{sales.commission}} <br>
 				</h5>
 			</div>
 			<div class="small-1 columns"></div>
@@ -126,7 +120,7 @@
 		novalidate>
 
 			<div class"row">
-			<div class="small-4 columns">
+			<div class="small-4 columns callout panel">
 			<h4>Report</h4>
 
 				<input type="text"
