@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Commission</title>
+	<title>Missouri ERP</title>
 	
 	<!-- Foundation stuffs -->
 	<link rel="stylesheet" type="text/css" href="foundation/css/foundation.min.css">
@@ -33,7 +33,7 @@
 	<header>
 		<div class="row">
     		<div class="small-12 columns">
-				<h1>Commission</h1>
+				<h3>The Missouri gunsmith's Enterprise Resource Planning system </h3>
 			</div>
 		</div>
 	</header>
@@ -48,7 +48,8 @@
 				<li class="userName">
 				<a>Welcome {{retrieveAndCheckCookie()}}!</a>
 				</li>
-				<li class="logOutButton">
+				<li ng-show="isCookieSet('user')"
+				class="logOutButton">
 				<a ng-click="redirect(0)">Log out</a>
 				</li>	
 		</ul>
