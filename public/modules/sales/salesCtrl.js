@@ -31,6 +31,12 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		$scope.retrieveCommissionData();
 		
 		$scope.checkRole();
+		
+	}
+
+	$scope.dateChange = function(){
+		$scope.getMaxAmoutOfItemsToSell();
+		$scope.getSalesForUserAndDate();
 	}
 
 	$scope.checkRole = function(){
@@ -55,7 +61,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		if (saleDate!=null) {
 			var dateSplited = saleDate.split("-");
 			var yearAndMonthInput = dateSplited[0] + "-" +
-				dateSplited[1];
+				parseInt(dateSplited[1]);
 
 			angular.forEach($scope.reportedDates,function(value){
 				
@@ -138,6 +144,20 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			return true;
 		};
 
+	}
+
+	$scope.getMaxAmoutOfItemsToSell=function(){
+		angular.forEach($scope.sales.productInfo,function(value){	
+			if(value.id == 1){
+				$scope.maxLocksToSell = value.maxAmount;
+			}
+			if(value.id == 2){
+				$scope.maxStocksToSell = value.maxAmount;
+			}
+			if(value.id == 3){
+				$scope.maxBarrelsToSell = value.maxAmount;
+			}
+		});
 	}
 
 	$scope.reportMonth = function(reportDate){
@@ -336,6 +356,13 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			}
 		});	
 		$scope.sales.commission += restCommission;
+
+		if ($scope.sales.itemsSold[0].locks*$scope.sales.itemsSold[0].stocks*
+				$scope.sales.itemsSold[0].barrels==0) {
+			
+				$scope.sales.commission = 0;			
+		};
+
 		console.log("Set commission: Total: "+$scope.sales.commission);
 	}
 

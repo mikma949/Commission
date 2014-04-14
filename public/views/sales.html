@@ -4,13 +4,7 @@
 	
 
 	<h4>Sales</h4>
-
-	User: {{getCookie('user')}} <br>
-	Reported dates: {{reportedDates}} <br>
-	Sold this month: {{sales.itemsSold}} <br>
-	Product info: {{sales.productInfo}} <br>
-	Total Sales this month: {{sales.totalSales}} <br>
-	Commission this month: {{sales.commission}} <br>
+	
 	<div ><h3>
 		{{sales.salesInfo}}  </h3>
 	</div>
@@ -33,9 +27,8 @@
 				id="salesUserForm.saleDate"
 				ng-model="salesUserForm.saleDate"
 				ng-init="salesUserForm.saleDate=today"
-				ng-init="getSalesForUserAndDate()"
 				name="salesUserForm.saleDate"
-				ng-change="getSalesForUserAndDate()"
+				ng-change="dateChange()"
 				placeholder="Date" 
 				required />
 
@@ -104,8 +97,22 @@
 				controllItemsLeft(salesUserForm.barrelsSold,3))">
 				Submit Sale</button>
 				
+				<br>
+				Total Sales this month: {{sales.totalSales}} <br>
+				Commission this month: {{sales.commission}} <br>
 			</div>
-			<div class="small-9 columns"></div>
+			<div class="small-8 columns">
+				<p> Sold this month <br>
+				Locks: {{sales.itemsSold[0].locks}} <br>
+				Stocks: {{sales.itemsSold[0].stocks}}<br>
+				Barrels: {{sales.itemsSold[0].barrels}}
+				</p><br>
+				<p> Left in stock this month <br>
+				Locks: {{maxLocksToSell - sales.itemsSold[0].locks}} <br>
+				Stocks: {{maxStocksToSell - sales.itemsSold[0].stocks}} <br>
+				Barrels: {{maxBarrelsToSell - sales.itemsSold[0].barrels}}	
+				</p>
+			</div>
 			</div>		
 		</form>
 
@@ -116,7 +123,7 @@
 		novalidate>
 
 			<div class"row">
-			<div class="small-4 columns">
+			<div class="small-12 columns">
 			<h4>Report</h4>
 
 				<input type="text"
@@ -142,7 +149,8 @@
 				!(!checkIfDateIsReported(submitMonthForm.reportDate) &&
 				controllUserInputFormatForReport(submitMonthForm.reportDate))">
 				Submit Report</button> <br>
-				{{sales.reportSuccess}}
+				{{sales.reportSuccess}}	<br>
+				Reported dates: {{reportedDates}} <br>
 				
 			</div>
 			</div>
