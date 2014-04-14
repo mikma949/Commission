@@ -30,6 +30,10 @@
 				<p class="errorMessage" 
 				ng-show="controllUserInputFormatForSaleDate(salesUserForm.saleDate) == false">
 				Invalid date format. Use yyyy-mm-dd</p>
+
+				<p class="errorMessage" 
+				ng-show="isDateValid(salesUserForm.saleDate) == false">
+				Invalid date</p>
 				
 				<input type="text"
 				id="salesUserForm.locksSold"
@@ -85,7 +89,7 @@
 				salesUserForm.saleDate) &&
 				controllItemsLeft(salesUserForm.locksSold,1) &&
 				controllItemsLeft(salesUserForm.stocksSold,2) &&
-				controllItemsLeft(salesUserForm.barrelsSold,3))">
+				controllItemsLeft(salesUserForm.barrelsSold,3) &&isDateValid(salesUserForm.saleDate))">
 				Submit Sale</button>
 				
 				<h3>{{sales.salesInfo}}</h3>
@@ -127,7 +131,7 @@
 				id="submitMonthForm.reportDate"
 				ng-model="submitMonthForm.reportDate"
 				name="submitMonthForm.reportDate"
-				ng-change="getSalesForUserAndDate(submitMonthForm.reportDate)"
+				ng-change="dateChange(submitMonthForm.reportDate)"
 				placeholder="Date" 
 				required />
 

@@ -218,6 +218,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			$scope.sales.itemsSold=null;
 			return;
 		}
+
 		userForm.userName = $scope.getCookie('user');
 
 		var dateHolder = saleDate;
@@ -383,4 +384,74 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		}
 		return "";
 	}
+
+	//check if date is valid
+	$scope.isDateValid = function(saleDate){
+		date = String(saleDate);
+		if(date.length < 10){
+			return true;
+		}else{
+		
+		var dateSplited = saleDate.split("-");
+		var year = dateSplited[0];
+		var month = dateSplited[1];
+		var day = dateSplited[2];
+
+			if (year > 1999 && year < 2151) {
+				if (month > 0 && month < 13) {
+
+				var daysInMonth = $scope.daysInMonth(month, year);
+
+					if (day > 0 && day <= daysInMonth) {
+						return true;
+					} else {
+						return false;	
+					};
+
+				} else {
+					return false;
+				};
+			} else {
+				return false;
+			};
+		};
+	}
+	//returns number of days in given mounth
+	//must check that the month is > 0 and < 13 before
+	$scope.daysInMonth = function(inmonth, inyear) {
+
+        var isleap = $scope.isLeapYear(inyear);
+        switch (Number(inmonth)) {
+        case 2:
+
+            if (isleap){
+                return 29;
+            } else {
+            	return 28;
+            };
+            break;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+        	return 30;
+            break;
+        default:
+        	return 31;
+        }
+    }
+
+    //check if the year is a leap year
+    $scope.isLeapYear = function(inyear) { 
+        var leap = false;
+        if (inyear % 4 == 0) { 
+            leap = true;
+            if (inyear > 1582) {
+                if ( inyear % 100 == 0 && inyear % 400 != 0) {
+                    leap = false;
+                };
+            };
+        };
+        return leap;
+    }
 });
