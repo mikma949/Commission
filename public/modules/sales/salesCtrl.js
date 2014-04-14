@@ -51,6 +51,17 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		$scope.retrieveProductInfo();
 		$scope.retrieveCommissionData();
 		
+		$scope.checkRole();
+	}
+
+	$scope.checkRole = function(){
+		if ($scope.getCookie('role') == 1) {
+			console.log("role == 1")
+		} else {
+			$location.url('/')
+			console.log("role != 1")
+		};
+		console.log("check role done")
 	}
 
 

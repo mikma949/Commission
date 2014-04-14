@@ -13,6 +13,19 @@ app.controller("reportCtrl", function($scope, $http, $location)
 	$scope.onLoad = function(){
 		console.log("onload");
 		$scope.activeReportsInDb = $scope.retrieveActiveReports();		
+		$scope.checkRole();
+		console.log("onLoad done")
+
+	}
+
+	$scope.checkRole = function(){
+		if ($scope.getCookie('role') == 2) {
+			console.log("role == 2")
+		} else {
+			$location.url('/')
+			console.log("role != 2")
+		};
+		console.log("check role done")
 	}
 
 	$scope.retrieveActiveReports = function () {
@@ -70,4 +83,15 @@ app.controller("reportCtrl", function($scope, $http, $location)
 		return "";
 	}
 
+	// Checks if the given cookie is set return true if cookie is set 
+	// and false if not. 
+	$scope.isCookieSet = function(cookieIdentifier){
+		var identifier = $scope.getCookie(cookieIdentifier);
+		if (identifier!="" && identifier!=null)
+		  {
+			return true;
+		  } else {
+			return false;
+		  }
+	}
 });

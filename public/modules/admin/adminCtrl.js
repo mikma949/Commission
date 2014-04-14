@@ -10,6 +10,24 @@ app.controller("adminCtrl", function($scope, $http, $location)
 		sellerOrders:'./modules/order/templates/sellerOrders.html'
 	};
 
+	$scope.onLoad = function(){
+		$scope.retrieveUserNames();
+		$scope.checkRole();
+		console.log("onLoad done")
+
+	}
+
+	$scope.checkRole = function(){
+		if ($scope.getCookie('role') == 3) {
+			console.log("role == 3")
+		} else {
+			$location.url('/')
+			console.log("role != 3")
+		};
+		console.log("check role done")
+	}
+
+
 	$scope.retrieveUserNames = function () {
 		
 		$http({method: 'GET', url: 'json/admin/getAllUsers', data: ""}).
@@ -116,5 +134,17 @@ app.controller("adminCtrl", function($scope, $http, $location)
 		for (var i = 0; i < cookies.length; i++){
   			document.cookie = cookies[i].split("=")[0] + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 		}
+	}
+
+	// Checks if the given cookie is set return true if cookie is set 
+	// and false if not. 
+	$scope.isCookieSet = function(cookieIdentifier){
+		var identifier = $scope.getCookie(cookieIdentifier);
+		if (identifier!="" && identifier!=null)
+		  {
+			return true;
+		  } else {
+			return false;
+		  }
 	}
 });
