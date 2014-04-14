@@ -3,7 +3,7 @@
 <div class="small-12 columns">
 	
 
-	<h4>Sales</h4>
+	
 	
 	<div ><h3>
 		{{sales.salesInfo}}  </h3>
@@ -14,7 +14,7 @@
 
 			<div class"row">
 			<div class="small-4 columns">
-				
+				<h4>Sales</h4>
 			
 				<select name="city" 
 				ng-model="salesUserForm.cityId"
@@ -26,7 +26,6 @@
 				<input type="text"
 				id="salesUserForm.saleDate"
 				ng-model="salesUserForm.saleDate"
-				ng-init="salesUserForm.saleDate=today"
 				name="salesUserForm.saleDate"
 				ng-change="dateChange()"
 				placeholder="Date" 
@@ -101,18 +100,22 @@
 				Total Sales this month: {{sales.totalSales}} <br>
 				Commission this month: {{sales.commission}} <br>
 			</div>
-			<div class="small-8 columns">
-				<p> Sold this month <br>
+			<div class="small-3 columns">
+				<br>
+				<br>
+				<br>
+				<h5> Sold this month <br>
 				Locks: {{sales.itemsSold[0].locks}} <br>
 				Stocks: {{sales.itemsSold[0].stocks}}<br>
 				Barrels: {{sales.itemsSold[0].barrels}}
-				</p><br>
-				<p> Left in stock this month <br>
+				</h5><br>
+				<h5> Left in stock this month <br>
 				Locks: {{maxLocksToSell - sales.itemsSold[0].locks}} <br>
 				Stocks: {{maxStocksToSell - sales.itemsSold[0].stocks}} <br>
 				Barrels: {{maxBarrelsToSell - sales.itemsSold[0].barrels}}	
-				</p>
+				</h5>
 			</div>
+			<div class="small-1 columns"></div>
 			</div>		
 		</form>
 
@@ -123,7 +126,7 @@
 		novalidate>
 
 			<div class"row">
-			<div class="small-12 columns">
+			<div class="small-4 columns">
 			<h4>Report</h4>
 
 				<input type="text"
@@ -150,7 +153,7 @@
 				controllUserInputFormatForReport(submitMonthForm.reportDate))">
 				Submit Report</button> <br>
 				{{sales.reportSuccess}}	<br>
-				Reported dates: {{reportedDates}} <br>
+				
 				
 			</div>
 			</div>
