@@ -19,7 +19,7 @@
 				id="salesUserForm.saleDate"
 				ng-model="salesUserForm.saleDate"
 				name="salesUserForm.saleDate"
-				ng-change="dateChange()"
+				ng-change="dateChange(salesUserForm.saleDate)"
 				placeholder="Date" 
 				required />
 
@@ -147,13 +147,22 @@
 				controllUserInputFormatForReport(submitMonthForm.reportDate))">
 				Submit Report</button> <br>
 				{{sales.reportSuccess}}	<br>
+
+				<!--button id="submitReportButton"
+				name="submitReportButton"
+				ng-disabled="
+				!(!checkIfDateIsReported(
+				salesUserForm.saleDate) &&
+				controllUserInputFormatForSaleDate(
+				salesUserForm.saleDate))">
+				Submit Report</button> <br>
+				{{sales.reportSuccess}}	<br-->
 				
 				
 			</div>
 			</div>
 
 		</form>
-
 
 
 

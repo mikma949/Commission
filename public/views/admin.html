@@ -2,6 +2,7 @@
 <div ng-controller="adminCtrl"
 data-ng-init="onLoad()">
 	<div class="row">
+			<div class="small-4 small-centered columns">
 		<div><h3>
 		Admin
 		</h3></div>
@@ -10,8 +11,7 @@ data-ng-init="onLoad()">
 			ng-model="promoteUserForm"
 			ng-submit="updateUserRole(promoteUserForm)">
 
-			<div class"row">
-			<div class="small-4 columns">
+			
 				
 				<input type="text" 
 				ng-model="promoteUserForm.user"
@@ -43,7 +43,7 @@ data-ng-init="onLoad()">
 
 				<div ng-show="updateSuccess"><h3> Update Successful </h3>
 			</div>
-			</div>		
+			
 		</form>
 
 			

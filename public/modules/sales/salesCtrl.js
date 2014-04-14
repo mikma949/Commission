@@ -34,9 +34,9 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		
 	}
 
-	$scope.dateChange = function(){
+	$scope.dateChange = function(date){
 		$scope.getMaxAmoutOfItemsToSell();
-		$scope.getSalesForUserAndDate();
+		$scope.getSalesForUserAndDate(date);
 	}
 
 	$scope.checkRole = function(){
@@ -161,6 +161,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	}
 
 	$scope.reportMonth = function(reportDate){
+
 		$scope.sales.reportSuccess =null;
 		userForm = {};
 		var dateSplit = reportDate.split("-");
@@ -211,9 +212,8 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});	
 	}
 
-	$scope.getSalesForUserAndDate=function(){
+	$scope.getSalesForUserAndDate=function(saleDate){
 		var userForm = {};
-		var saleDate = $scope.salesUserForm.saleDate;
 		if(saleDate.length<7){
 			$scope.sales.itemsSold=null;
 			return;
