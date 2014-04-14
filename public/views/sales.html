@@ -4,13 +4,7 @@
 	
 
 	<h4>Sales</h4>
-
-	User: {{getCookie('user')}} <br>
-	Reported dates: {{reportedDates}} <br>
-	Sold this month: {{sales.itemsSold}} <br>
-	Product info: {{sales.productInfo}} <br>
-	Total Sales this month: {{sales.totalSales}} <br>
-	Commission this month: {{sales.commission}} <br>
+	
 	<div ><h3>
 		{{sales.salesInfo}}  </h3>
 	</div>
@@ -34,7 +28,7 @@
 				ng-model="salesUserForm.saleDate"
 				ng-init="salesUserForm.saleDate=today"
 				name="salesUserForm.saleDate"
-				ng-change="getSalesForUserAndDate()"
+				ng-change="dateChange()"
 				placeholder="Date" 
 				required />
 
@@ -54,8 +48,12 @@
 				required />
 
 				<p class="errorMessage" 
-				ng-show="validRole(salesUserForm) == false">
-				You can't sell these many locks. Only {{locksLeft}} locks left</p>
+				ng-show="controllUserInputFormatForNumberOfItems(salesUserForm.locksSold) == false">
+				Invalid format. Only numbers</p>
+
+				<p class="errorMessage" 
+				ng-show="controllItemsLeft(salesUserForm.locksSold,1) == false">
+				You can't sell these many locks. You only have {{locksToSell}} locks left to sell.</p>
 
 				<input type="text"
 				id="salesUserForm.stocksSold"
@@ -64,12 +62,28 @@
 				placeholder="Stocks Sold" 
 				required />
 
+				<p class="errorMessage" 
+				ng-show="controllUserInputFormatForNumberOfItems(salesUserForm.stocksSold) == false">
+				Invalid format. Only numbers</p>
+
+				<p class="errorMessage" 
+				ng-show="controllItemsLeft(salesUserForm.stocksSold,2) == false">
+				You can't sell these many stocks. You only have {{stocksToSell}} stocks left to sell.</p>
+
 				<input type="text"
 				id="salesUserForm.barrelsSold"
 				ng-model="salesUserForm.barrelsSold"
-				name="salesUserForm.barrelsSold" 
+				name="salesUserForm.barrelsSold"
 				placeholder="Barrels Sold" 
 				required />
+
+				<p class="errorMessage" 
+				ng-show="controllUserInputFormatForNumberOfItems(salesUserForm.barrelsSold) == false">
+				Invalid format. Only numbers</p>
+
+				<p class="errorMessage" 
+				ng-show="controllItemsLeft(salesUserForm.barrelsSold,3) == false">
+				You can't sell these many barrels. You only have {{barrelsToSell}} barrels left to sell.</p>
 		
 				<button id="submitSaleButton"
 				ng-click="place(salesUserForm)"
@@ -77,11 +91,28 @@
 				ng-disabled="
 				!(!checkIfDateIsReported(salesUserForm.saleDate) &&
 				controllUserInputFormatForSaleDate(
-				salesUserForm.saleDate))">
+				salesUserForm.saleDate) &&
+				controllItemsLeft(salesUserForm.locksSold,1) &&
+				controllItemsLeft(salesUserForm.stocksSold,2) &&
+				controllItemsLeft(salesUserForm.barrelsSold,3))">
 				Submit Sale</button>
 				
+				<br>
+				Total Sales this month: {{sales.totalSales}} <br>
+				Commission this month: {{sales.commission}} <br>
 			</div>
-			<div class="small-9 columns"></div>
+			<div class="small-8 columns">
+				<p> Sold this month <br>
+				Locks: {{sales.itemsSold[0].locks}} <br>
+				Stocks: {{sales.itemsSold[0].stocks}}<br>
+				Barrels: {{sales.itemsSold[0].barrels}}
+				</p><br>
+				<p> Left in stock this month <br>
+				Locks: {{maxLocksToSell - sales.itemsSold[0].locks}} <br>
+				Stocks: {{maxStocksToSell - sales.itemsSold[0].stocks}} <br>
+				Barrels: {{maxBarrelsToSell - sales.itemsSold[0].barrels}}	
+				</p>
+			</div>
 			</div>		
 		</form>
 
@@ -92,7 +123,7 @@
 		novalidate>
 
 			<div class"row">
-			<div class="small-4 columns">
+			<div class="small-12 columns">
 			<h4>Report</h4>
 
 				<input type="text"
@@ -118,7 +149,8 @@
 				!(!checkIfDateIsReported(submitMonthForm.reportDate) &&
 				controllUserInputFormatForReport(submitMonthForm.reportDate))">
 				Submit Report</button> <br>
-				{{sales.reportSuccess}}
+				{{sales.reportSuccess}}	<br>
+				Reported dates: {{reportedDates}} <br>
 				
 			</div>
 			</div>
