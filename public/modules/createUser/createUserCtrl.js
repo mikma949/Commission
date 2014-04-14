@@ -6,6 +6,10 @@ app.controller("createUserCtrl", function($scope, $http, $location)
 	$scope.templates =
     { createUserForm: 'modules/createUser/templates/createUserForm.html'};
 
+    $scope.onLoad = function (){
+		$scope.loadUserNames();
+	};
+
 	$scope.loadUserNames = function () {
 		
 		$http({method: 'GET', url: 'json/user/getAllUsers', data: ""}).
@@ -139,11 +143,15 @@ app.controller("createUserCtrl", function($scope, $http, $location)
 		return "";
 	}
 
-	/*
-	This method will handle redirection to a given module
-	*/
-	$scope.redirect=function()
-	{
-		$location.url('/');
+	// Checks if the given cookie is set return true if cookie is set 
+	// and false if not. 
+	$scope.isCookieSet = function(cookieIdentifier){
+		var identifier = $scope.getCookie(cookieIdentifier);
+		if (identifier!="" && identifier!=null)
+		  {
+			return true;
+		  } else {
+			return false;
+		  }
 	}
 });
