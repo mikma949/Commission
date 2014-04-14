@@ -33,7 +33,7 @@ app.controller("createUserCtrl", function($scope, $http, $location)
 
 		$http({method: 'POST', url: 'json/user/addUser', data: userForm}).
 		success(function (data, status, headers, config) {
-			alert("the user account was created");
+		//	alert("the user account was created");
 			$scope.redirect();
 		}).
 		error(function (data, status, headers, config) {

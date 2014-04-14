@@ -6,24 +6,25 @@
 			<div class="small-4 columns">
 				<input type="text" 
 				ng-model="loginUserForm.user"
-				name="loginUserForm.user" 
+				name="loginUserForm.username" 
 				placeholder="User Name"
 				required/>
 			
 				<input type="password" 
 				ng-model="loginUserForm.password"
-				name: "loginUserForm.password" 
+				name="loginUserForm.password" 
 				placeholder="Password" 
 				required />
 			
 				<button 
 				id="loginUserButton" 
+				name="loginUserForm.login"
 				ng-disabled="!(!!loginUserForm.user && !!loginUserForm.password)"
 				ng-click="processLoginUserForm(loginUserForm)">
 				Log in
 				</button>
 
-				<a id="createUser" href="#createUser"><button>Create User</button></a>
+				<a name="createUser" id="createUser" href="#createUser"><button>Create User</button></a>
 			</div>	
 		</div>
 

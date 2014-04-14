@@ -39,6 +39,7 @@ data-ng-init="loadUserNames()">
 		
 		<button id="addUserButton"
 		type="submit"
+		name="createUserForm.createUser"
 		ng-disabled="!(noEmptyFields(createUserForm) &&
 		checkNewUsernameValidity(createUserForm) &&
 		confirmPasswords(createUserForm))">

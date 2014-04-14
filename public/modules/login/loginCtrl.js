@@ -65,7 +65,7 @@ app.controller("loginCtrl", function($scope, $http, $location)
 	$scope.redirect=function(role)
 	{
 		if (role == 0) {
-			alert("You shall not pass! (Your role is to low)");
+			
 			$location.url('/')
 		};
 

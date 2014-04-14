@@ -1,7 +1,7 @@
 app.controller("adminCtrl", function($scope, $http, $location) 
 { 
 	
-	
+	$scope.updateSuccess = false;
 	// Loads templates into id to be called on in the view 
 	$scope.templates=
 	{
@@ -52,10 +52,11 @@ app.controller("adminCtrl", function($scope, $http, $location)
 	
 	$scope.updateUserRole=function(userForm)
 	{
+		$scope.updateSuccess = false;
 		$http({method: 'POST', url: 'json/admin/updateUser', data: userForm}).
 		success(function (data, status, headers, config) {
-
-			alert("Update success");
+			$scope.updateSuccess = true;
+			
 		}).
 		error(function (data, status, headers, config) {
 

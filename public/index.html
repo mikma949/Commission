@@ -37,6 +37,23 @@
 			</div>
 		</div>
 	</header>
+
+	<nav class="top-bar" data-topbar ng-controller="loginCtrl">
+		<section class="top-bar-section">
+			<ul class="right">
+				
+			</ul>
+
+		<ul class="left">
+				<li class="userName">
+				<a>Welcome {{retrieveAndCheckCookie()}}!</a>
+				</li>
+				<li class="logOutButton">
+				<a ng-click="redirect(0)">Log out</a>
+				</li>	
+		</ul>
+		</section>
+	</nav>
 	<div id="mainContainer">
 		<div ng-view></div>
 	</div>

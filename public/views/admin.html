@@ -33,11 +33,17 @@ data-ng-init="retrieveUserNames()">
 				
 				<button id="promoteUserButton"
 				type="submit"
+				name="promoteUserButton"
 				ng-disabled="!(checkUsernameValidity(promoteUserForm) &&
 				validRole(promoteUserForm))">
-				Update Role</button>
+				Update Role</button> <br>
+
+				<div ng-show="updateSuccess"><h3> Update Successful </h3>
 			</div>
 			</div>		
 		</form>
+
+			
+		</div>
 	</div>
 </div>
