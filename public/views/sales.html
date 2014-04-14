@@ -55,8 +55,12 @@
 				required />
 
 				<p class="errorMessage" 
-				ng-show="validRole(salesUserForm) == false">
-				You can't sell these many locks. Only {{locksLeft}} locks left</p>
+				ng-show="controllUserInputFormatForNumberOfItems(salesUserForm.locksSold) == false">
+				Invalid format. Only numbers</p>
+
+				<p class="errorMessage" 
+				ng-show="controllItemsLeft(salesUserForm.locksSold,1) == false">
+				You can't sell these many locks. You only have {{locksToSell}} locks left to sell.</p>
 
 				<input type="text"
 				id="salesUserForm.stocksSold"
@@ -65,12 +69,28 @@
 				placeholder="Stocks Sold" 
 				required />
 
+				<p class="errorMessage" 
+				ng-show="controllUserInputFormatForNumberOfItems(salesUserForm.stocksSold) == false">
+				Invalid format. Only numbers</p>
+
+				<p class="errorMessage" 
+				ng-show="controllItemsLeft(salesUserForm.stocksSold,2) == false">
+				You can't sell these many stocks. You only have {{stocksToSell}} stocks left to sell.</p>
+
 				<input type="text"
 				id="salesUserForm.barrelsSold"
 				ng-model="salesUserForm.barrelsSold"
-				name="salesUserForm.barrelsSold" 
+				name="salesUserForm.barrelsSold"
 				placeholder="Barrels Sold" 
 				required />
+
+				<p class="errorMessage" 
+				ng-show="controllUserInputFormatForNumberOfItems(salesUserForm.barrelsSold) == false">
+				Invalid format. Only numbers</p>
+
+				<p class="errorMessage" 
+				ng-show="controllItemsLeft(salesUserForm.barrelsSold,3) == false">
+				You can't sell these many barrels. You only have {{barrelsToSell}} barrels left to sell.</p>
 		
 				<button id="submitSaleButton"
 				ng-click="place(salesUserForm)"
@@ -78,7 +98,10 @@
 				ng-disabled="
 				!(!checkIfDateIsReported(salesUserForm.saleDate) &&
 				controllUserInputFormatForSaleDate(
-				salesUserForm.saleDate))">
+				salesUserForm.saleDate) &&
+				controllItemsLeft(salesUserForm.locksSold,1) &&
+				controllItemsLeft(salesUserForm.stocksSold,2) &&
+				controllItemsLeft(salesUserForm.barrelsSold,3))">
 				Submit Sale</button>
 				
 			</div>

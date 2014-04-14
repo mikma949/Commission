@@ -3,30 +3,9 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	$scope.sales ={};
 	$scope.reportedDates = {};
 	
-	
-
-
-
-
-
-	
-	// Loads templates into id to be called on in the view 
-	$scope.templates=
-	{
-		salesForm:'./modules/sales/templates/salesForm.html',
-		buyerOrders:'./modules/sales/templates/buyerOrders.html',
-		sellerOrders:'./modules/sales/templates/sellerOrders.html'
-	};
-
 	/* -------- TODO -------
 	kolla att datumet är korrekt
-	
-	Inte kunna se sidor utan att vara inloggad och har
-	rätt role.
-
 	*/
-
-
 
 	$scope.onLoad = function(){
 		// sets todays date to be initialized in saleDate
@@ -65,8 +44,9 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	}
 
 
-	/* 	Returns true if the input date has aleady been
-		reported, else false.
+	/* 	
+	Returns true if the input date has aleady been
+	reported, else false.
 	*/
 	$scope.checkIfDateIsReported = function(saleDate){
 
@@ -99,6 +79,16 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		return true;
 	}
 
+	$scope.controllUserInputFormatForNumberOfItems = function(input){
+		if (input!=null) {
+			var res = input.match(/^[0-9]*/);
+			if (res != input) {
+				return false;
+			};
+		};
+		return true;
+	}
+
 	$scope.controllUserInputFormatForReport = function(saleDate){
 
 		if (saleDate!=null) {
@@ -108,6 +98,46 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			};
 		};
 		return true;
+	}
+
+	$scope.controllItemsLeft = function(numberOfItemsUserWantToSell, itemId){
+
+		if ($scope.sales.itemsSold == null) {
+			return;
+		};
+
+		var itemsSold = 0;
+		if (itemId == 1) {
+			itemsSold = $scope.sales.itemsSold[0].locks;
+		} else if (itemId == 2) {
+			itemsSold = $scope.sales.itemsSold[0].stocks;
+		} else if (itemId == 3) {
+			itemsSold = $scope.sales.itemsSold[0].barrels;
+		};
+
+		var maxAmountOfItemsToSell = 0;
+
+		angular.forEach($scope.sales.productInfo,function(value){	
+			if(value.id == itemId){
+				maxAmountOfItemsToSell = value.maxAmount;
+			}
+		});
+
+
+		var itemsLeft = maxAmountOfItemsToSell - itemsSold;
+		if ((itemsLeft - numberOfItemsUserWantToSell) < 0) {
+			if (itemId == 1) {
+				$scope.locksToSell = itemsLeft;
+			} else if (itemId == 2) {
+				$scope.stocksToSell = itemsLeft;
+			} else if (itemId == 3) {
+				$scope.barrelsToSell = itemsLeft;
+			};
+			return false;
+		} else {
+			return true;
+		};
+
 	}
 
 	$scope.reportMonth = function(reportDate){
@@ -125,16 +155,6 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		userForm.totalSales = $scope.sales.totalSales;
 		userForm.commission = $scope.sales.commission;
 
-		/*alert("userName: " + userForm.userName +
-			" year: " + userForm.reportYear + 
-			" month: " + userForm.reportMonth +
-			" locks: " + userForm.locksSold + 
-			" stocks: " + userForm.stocksSold +
-			" barrels: " + userForm.barrelsSold + 
-			" totalSales: " + userForm.totalSales +
-			" commission: " + userForm.commission);
-		*/
-		
 		$http({method: 'POST', url: 'json/sales/reportMonth', data: userForm}).
 		success(function (data, status, headers, config) {
 			console.log("reportMonth: success");
@@ -171,8 +191,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});	
 	}
 
-	$scope.getSalesForUserAndDate=function()
-	{
+	$scope.getSalesForUserAndDate=function(){
 		var userForm = {};
 		var saleDate = $scope.salesUserForm.saleDate;
 		if(saleDate.length<7){
@@ -201,11 +220,6 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			console.log("getSalesForUserAndDate: FAILED");
 		});	
 	}
-
-
-
-//  -----<<<< Micke kod >>>>-----
-
 
 	/*
 	This method will place a new sale
@@ -270,7 +284,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});
 	};
 
-		/*
+	/*
 	Retrieves commission boundries and percentages.
 	*/
 	$scope.retrieveCommissionData= function () {
@@ -325,36 +339,6 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		console.log("Set commission: Total: "+$scope.sales.commission);
 	}
 
-
-// -----<<<<Gammal kod>>>----
-	/*
-	This method will retrieve cookies stored by the application 
-	and check if the session information is still valid.
-	*/
-	$scope.retrieveAndCheckCookie=function()
-	{
-		var user=$scope.getCookie('user');
-		if(user==""){
-			$scope.redirect('login');
-		}else{
-			return user;
-		}
-	}
-
-	/*
-	This method will handle redirection to a given module
-	*/
-	$scope.redirect=function(redirectTo)
-	{	
-		if(redirectTo=="login"){
-			$location.url('/login');
-		}
-		else if(redirectTo=="logout"){
-			$scope.deleteCookies();
-			$location.url('/login');
-		}
-	}
-
 	/*
 	Returns the value of the cookie given. If no cookie
 	present getCookie returns "".
@@ -372,13 +356,4 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		}
 		return "";
 	}
-
-		// Deletes all cookies
-	$scope.deleteCookies = function(){
-		var cookies = document.cookie.split(";");
-		for (var i = 0; i < cookies.length; i++){
-  			document.cookie = cookies[i].split("=")[0] + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-		}
-	}
-
 });
