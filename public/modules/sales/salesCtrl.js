@@ -3,6 +3,10 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	$scope.sales ={};
 	$scope.reportedDates = {};
 	
+	
+
+
+
 
 
 	
@@ -25,6 +29,22 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 
 	$scope.onLoad = function(){
+		// sets todays date to be initialized in saleDate
+		var td = new Date();
+		var dd = td.getDate();
+		var mm = td.getMonth()+1; //January is 0!
+		var yyyy = td.getFullYear();
+
+		if(dd<10) {
+	   	 dd='0'+dd
+		} 
+
+		if(mm<10) {
+	   	 mm='0'+mm
+		} 
+
+	$scope.today = yyyy+'-'+mm+'-'+dd;
+
 
 		$scope.retrieveCities();
 		$scope.getReportedDatesForUser();
@@ -179,6 +199,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 	{
 		salesForm.salesPersonId=$scope.getCookie('user');
 		
+
 		//Set the itemId's
 		salesForm.lock =1;
 		salesForm.stock=2;
@@ -186,10 +207,16 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		
 		$http({method: 'POST', url: 'json/sales/place', data: salesForm}).
 		success(function (data, status, headers, config) {
-			alert("Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId);
+			//alert("Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId);
+			$scope.saleSuccess = true;
+			$scope.sales.salesInfo="Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId;
 			console.log("Sale placed");
 			$scope.getSalesForUserAndDate(salesForm);
-			location.reload();
+			$scope.salesUserForm.locksSold=null;
+			$scope.salesUserForm.stocksSold=null;
+			$scope.salesUserForm.barrelsSold=null;
+			$scope.onLoad()
+			//location.reload();
 		
 		}).
 		error(function (data, status, headers, config) {
