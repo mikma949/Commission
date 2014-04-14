@@ -16,10 +16,9 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 	/* -------- TODO -------
 	kolla att datumet är korrekt
-	Fixa så att submit inte funkar ifall 
-	checkIfDateIsReported == true
-	Lös så att ifall select city inte är
-	valt så disable submit.
+	
+	Inte kunna se sidor utan att vara inloggad och har
+	rätt role.
 
 	*/
 
@@ -42,17 +41,82 @@ app.controller("salesCtrl", function($scope, $http, $location)
 
 		var isDateReported = false;
 
-		angular.forEach($scope.reportedDates,function(value){
-			
-			if(saleDate == (value.year + "-" + value.month)){
-				isDateReported=true;
-			}
-			
-		});
+		if (saleDate!=null) {
+			var dateSplited = saleDate.split("-");
+			var yearAndMonthInput = dateSplited[0] + "-" +
+				dateSplited[1];
+
+			angular.forEach($scope.reportedDates,function(value){
+				
+				if(yearAndMonthInput == (value.year + "-" + value.month)){
+					isDateReported=true;
+				}
+				
+			});
+		};
 		return isDateReported;
 	}
 
+	$scope.controllUserInputFormatForSaleDate = function(saleDate){
 
+		if (saleDate!=null) {
+			var res = saleDate.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}/);
+			if (res != saleDate) {
+				return false;
+			};
+		};
+		return true;
+	}
+
+	$scope.controllUserInputFormatForReport = function(saleDate){
+
+		if (saleDate!=null) {
+			var res = saleDate.match(/^[0-9]{4}-[0-9]{2}/);
+			if (res != saleDate) {
+				return false;
+			};
+		};
+		return true;
+	}
+
+	$scope.reportMonth = function(reportDate){
+		userForm = {};
+		var dateSplit = reportDate.split("-");
+		userForm.reportYear = dateSplit[0];
+		userForm.reportMonth = dateSplit[1];
+		userForm.userName = $scope.getCookie('user');
+
+		userForm.locksSold = $scope.sales.itemsSold[0].locks;
+		userForm.stocksSold = $scope.sales.itemsSold[0].stocks;
+		userForm.barrelsSold = $scope.sales.itemsSold[0].barrels;
+
+		userForm.totalSales = $scope.sales.totalSales;
+		userForm.commission = $scope.sales.commission;
+
+		/*alert("userName: " + userForm.userName +
+			" year: " + userForm.reportYear + 
+			" month: " + userForm.reportMonth +
+			" locks: " + userForm.locksSold + 
+			" stocks: " + userForm.stocksSold +
+			" barrels: " + userForm.barrelsSold + 
+			" totalSales: " + userForm.totalSales +
+			" commission: " + userForm.commission);
+		*/
+		
+		$http({method: 'POST', url: 'json/sales/reportMonth', data: userForm}).
+		success(function (data, status, headers, config) {
+			console.log("reportMonth: success");
+			console.log("reportMonth answer: " 
+				+ data);
+			alert("Report success");
+			location.reload();
+		}).
+		error(function (data, status, headers, config) {
+			console.log("reportMonth: FAILED");
+			alert("Report FAILED");
+		});
+		
+	}
 
 	$scope.getReportedDatesForUser=function()
 	{
@@ -72,15 +136,17 @@ app.controller("salesCtrl", function($scope, $http, $location)
 		});	
 	}
 
-	$scope.getSalesForUserAndDate=function(userForm)
+	$scope.getSalesForUserAndDate=function(saleDate)
 	{
-		if(userForm.saleDate.length!=10){
+		var userForm = {};
+
+		if(saleDate.length!=7){
 			$scope.sales.itemsSold=null;
 			return;
 		}
 		userForm.userName = $scope.getCookie('user');
 
-		var dateHolder = userForm.saleDate;
+		var dateHolder = saleDate;
 		var dateSplited = dateHolder.split("-");
 
 		userForm.year = dateSplited[0];
@@ -123,6 +189,7 @@ app.controller("salesCtrl", function($scope, $http, $location)
 			alert("Sale made on "+salesForm.saleDate +" by "+salesForm.salesPersonId);
 			console.log("Sale placed");
 			$scope.getSalesForUserAndDate(salesForm);
+			location.reload();
 		
 		}).
 		error(function (data, status, headers, config) {
